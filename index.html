@@ -53,23 +53,23 @@
   <div id="container">
     <img id="ticket" src="background.png" alt="Gender reveal ticket" />
     <div class="scratch-zone" style="left: 7.00%; top: 65.58%;">
-      <img src='data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%20100%20100%27%3E%3Crect%20width%3D%27100%25%27%20height%3D%27100%25%27%20fill%3D%27%23f88%27/%3E%3Ctext%20x%3D%2750%25%27%20y%3D%2755%27%20font-size%3D%2750%27%20text-anchor%3D%27middle%27%20fill%3D%27%23fff%27%3E1%3C/text%3E%3C/svg%3E' alt="Reveal 1" />
+      <img alt="Reveal" />
       <canvas></canvas>
     </div>
     <div class="scratch-zone" style="left: 37.92%; top: 65.58%;">
-      <img src='data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%20100%20100%27%3E%3Crect%20width%3D%27100%25%27%20height%3D%27100%25%27%20fill%3D%27%238f8%27/%3E%3Ctext%20x%3D%2750%25%27%20y%3D%2755%27%20font-size%3D%2750%27%20text-anchor%3D%27middle%27%20fill%3D%27%23fff%27%3E2%3C/text%3E%3C/svg%3E' alt="Reveal 2" />
+      <img alt="Reveal" />
       <canvas></canvas>
     </div>
     <div class="scratch-zone" style="left: 68.84%; top: 65.58%;">
-      <img src='data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%20100%20100%27%3E%3Crect%20width%3D%27100%25%27%20height%3D%27100%25%27%20fill%3D%27%2388f%27/%3E%3Ctext%20x%3D%2750%25%27%20y%3D%2755%27%20font-size%3D%2750%27%20text-anchor%3D%27middle%27%20fill%3D%27%23fff%27%3E3%3C/text%3E%3C/svg%3E' alt="Reveal 3" />
+      <img alt="Reveal" />
       <canvas></canvas>
     </div>
     <div class="scratch-zone" style="left: 21.61%; top: 80.94%;">
-      <img src='data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%20100%20100%27%3E%3Crect%20width%3D%27100%25%27%20height%3D%27100%25%27%20fill%3D%27%23ff8%27/%3E%3Ctext%20x%3D%2750%25%27%20y%3D%2755%27%20font-size%3D%2750%27%20text-anchor%3D%27middle%27%20fill%3D%27%23fff%27%3E4%3C/text%3E%3C/svg%3E' alt="Reveal 4" />
+      <img alt="Reveal" />
       <canvas></canvas>
     </div>
     <div class="scratch-zone" style="left: 54.19%; top: 80.38%;">
-      <img src='data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%20100%20100%27%3E%3Crect%20width%3D%27100%25%27%20height%3D%27100%25%27%20fill%3D%27%238ff%27/%3E%3Ctext%20x%3D%2750%25%27%20y%3D%2755%27%20font-size%3D%2750%27%20text-anchor%3D%27middle%27%20fill%3D%27%23fff%27%3E5%3C/text%3E%3C/svg%3E' alt="Reveal 5" />
+      <img alt="Reveal" />
       <canvas></canvas>
     </div>
   </div>
@@ -142,7 +142,21 @@
     }
 
     window.addEventListener('load', () => {
-      document.querySelectorAll('.scratch-zone').forEach(setupZone);
+      const zones = document.querySelectorAll('.scratch-zone');
+      const images = ['girl.png', 'girl.png', 'girl.png', 'boy.png', 'boy.png'];
+
+      for (let i = images.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [images[i], images[j]] = [images[j], images[i]];
+      }
+
+      zones.forEach((zone, idx) => {
+        const img = zone.querySelector('img');
+        img.src = images[idx];
+        img.alt = images[idx].includes('girl') ? 'Girl' : 'Boy';
+      });
+
+      zones.forEach(setupZone);
     });
   </script>
 </body>
