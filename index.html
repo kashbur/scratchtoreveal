@@ -1,76 +1,114 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gender Reveal Scratcher</title>
-    <style>
-        html, body {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: #f0f0f0;
-        }
-        #container {
-            position: relative;
-            display: inline-block;
-        }
-        #scratchCanvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-        }
-        #ticket {
-            display: block;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gender Reveal Scratcher</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background-color: #f0f0f0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #container {
+      position: relative;
+      width: 90vw;              /* Responsive width */
+      max-width: 400px;         /* Limit on large screens */
+    }
+
+    #ticket {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    #scratchCanvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;              /* Stretch to match image */
+      height: 100%;
+      touch-action: none;       /* Prevent scrolling while scratching on mobile */
+    }
+  </style>
 </head>
 <body>
-    <div id="container">
-        <img id="ticket" src="background.png" alt="Gender reveal ticket">
-        <canvas id="scratchCanvas"></canvas>
-    </div>
+  <div id="container">
+    <img id="ticket" src="background.png" alt="Gender reveal ticket" />
+    <canvas id="scratchCanvas"></canvas>
+  </div>
 
-    <script>
-        const canvas = document.getElementById('scratchCanvas');
-        const ctx = canvas.getContext('2d');
-        const ticket = document.getElementById('ticket');
-        const radius = 20;
-        let isDrawing = false;
+  <script>
+    const canvas = document.getElementById('scratchCanvas');
+    const ctx = canvas.getContext('2d');
+    const ticket = document.getElementById('ticket');
+    const radius = 20;
+    let isDrawing = false;
 
-        function resize() {
-            canvas.width = ticket.offsetWidth;
-            canvas.height = ticket.offsetHeight;
-            ctx.fillStyle = '#C0C0C0';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-        }
+    function resizeCanvasToMatchImage() {
+      const rect = ticket.getBoundingClientRect();
+      canvas.width = rect.width;
+      canvas.height = rect.height;
 
-        function scratch(x, y) {
-            ctx.globalCompositeOperation = 'destination-out';
-            ctx.beginPath();
-            ctx.arc(x, y, radius, 0, Math.PI * 2);
-            ctx.fill();
-        }
+      // Reset composite mode and fill silver
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.fillStyle = '#C0C0C0';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
 
-        canvas.addEventListener('mousedown', (e) => {
-            isDrawing = true;
-            scratch(e.offsetX, e.offsetY);
-        });
+    function getPos(e) {
+      const rect = canvas.getBoundingClientRect();
+      const x = (e.clientX || e.touches[0].clientX) - rect.left;
+      const y = (e.clientY || e.touches[0].clientY) - rect.top;
+      return { x, y };
+    }
 
-        canvas.addEventListener('mousemove', (e) => {
-            if (!isDrawing) return;
-            scratch(e.offsetX, e.offsetY);
-        });
+    function scratch(x, y) {
+      ctx.globalCompositeOperation = 'destination-out';
+      ctx.beginPath();
+      ctx.arc(x, y, radius, 0, Math.PI * 2);
+      ctx.fill();
+    }
 
-        document.addEventListener('mouseup', () => {
-            isDrawing = false;
-        });
+    // Mouse events
+    canvas.addEventListener('mousedown', (e) => {
+      isDrawing = true;
+      const { x, y } = getPos(e);
+      scratch(x, y);
+    });
 
-        window.addEventListener('resize', resize);
-        window.addEventListener('load', resize);
-    </script>
+    canvas.addEventListener('mousemove', (e) => {
+      if (!isDrawing) return;
+      const { x, y } = getPos(e);
+      scratch(x, y);
+    });
+
+    document.addEventListener('mouseup', () => isDrawing = false);
+
+    // Touch events
+    canvas.addEventListener('touchstart', (e) => {
+      isDrawing = true;
+      const { x, y } = getPos(e);
+      scratch(x, y);
+    });
+
+    canvas.addEventListener('touchmove', (e) => {
+      if (!isDrawing) return;
+      e.preventDefault(); // Prevent scrolling
+      const { x, y } = getPos(e);
+      scratch(x, y);
+    });
+
+    document.addEventListener('touchend', () => isDrawing = false);
+
+    // Resize scratch layer when image loads or window resizes
+    window.addEventListener('load', resizeCanvasToMatchImage);
+    window.addEventListener('resize', resizeCanvasToMatchImage);
+  </script>
 </body>
 </html>
