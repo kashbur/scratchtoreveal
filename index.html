@@ -147,20 +147,39 @@
 
     window.addEventListener('load', () => {
       const zones = document.querySelectorAll('.scratch-zone');
-      const images = ['girl.png', 'girl.png', 'girl.png', 'boy.png', 'boy.png'];
 
-      for (let i = images.length - 1; i > 0; i--) {
+      // Prepare two girls and two boys for the first four reveals
+      const revealQueue = ['girl.png', 'girl.png', 'boy.png', 'boy.png'];
+      for (let i = revealQueue.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
-        [images[i], images[j]] = [images[j], images[i]];
+        [revealQueue[i], revealQueue[j]] = [revealQueue[j], revealQueue[i]];
       }
 
-      zones.forEach((zone, idx) => {
-        const img = zone.querySelector('img');
-        img.src = images[idx];
-        img.alt = images[idx].includes('girl') ? 'Girl' : 'Boy';
-      });
+      let revealedCount = 0;
 
-      zones.forEach(setupZone);
+      zones.forEach(zone => {
+        const img = zone.querySelector('img');
+        const canvas = zone.querySelector('canvas');
+
+        function reveal() {
+          if (img.dataset.revealed) return;
+          revealedCount++;
+          let src;
+          if (revealedCount === 5) {
+            src = 'girl.png';
+          } else {
+            src = revealQueue.pop();
+          }
+          img.src = src;
+          img.alt = src.includes('girl') ? 'Girl' : 'Boy';
+          img.dataset.revealed = 'true';
+        }
+
+        canvas.addEventListener('mousedown', reveal);
+        canvas.addEventListener('touchstart', reveal);
+
+        setupZone(zone);
+      });
     });
   </script>
 </body>
