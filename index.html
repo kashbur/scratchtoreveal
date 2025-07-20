@@ -147,23 +147,44 @@
 
     window.addEventListener('load', () => {
       const zones = document.querySelectorAll('.scratch-zone');
-      // First four spots contain two girls and two boys in random order
-      const firstFour = ['girl.png', 'girl.png', 'boy.png', 'boy.png'];
-      for (let i = firstFour.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [firstFour[i], firstFour[j]] = [firstFour[j], firstFour[i]];
-      }
+// First four spots contain two girls and two boys in random order
+const revealQueue = ['girl.png', 'girl.png', 'boy.png', 'boy.png'];
+for (let i = revealQueue.length - 1; i > 0; i--) {
+  const j = Math.floor(Math.random() * (i + 1));
+  [revealQueue[i], revealQueue[j]] = [revealQueue[j], revealQueue[i]];
+}
 
-      // Fifth spot is always the tie breaker (girl)
-      const images = [...firstFour, 'girl.png'];
+// Add tie-breaker image (always a girl) as the fifth
+revealQueue.push('girl.png');
 
-      zones.forEach((zone, idx) => {
+let revealedCount = 0;
+
+zones.forEach((zone, idx) => {
+  const image = revealQueue[idx];
+  // your zone logic using `image` here
+});
         const img = zone.querySelector('img');
-        img.src = images[idx];
-        img.alt = images[idx].includes('girl') ? 'Girl' : 'Boy';
-      });
+        const canvas = zone.querySelector('canvas');
 
-      zones.forEach(setupZone);
+        function reveal() {
+          if (img.dataset.revealed) return;
+          revealedCount++;
+          let src;
+          if (revealedCount === 5) {
+            src = 'girl.png';
+          } else {
+            src = revealQueue.pop();
+          }
+          img.src = src;
+          img.alt = src.includes('girl') ? 'Girl' : 'Boy';
+          img.dataset.revealed = 'true';
+        }
+
+        canvas.addEventListener('mousedown', reveal);
+        canvas.addEventListener('touchstart', reveal);
+
+        setupZone(zone);
+      });
     });
   </script>
 </body>
