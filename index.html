@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gender Reveal Scratcher</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f0f0f0;
+        }
+        #container {
+            position: relative;
+            display: inline-block;
+        }
+        #scratchCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        #ticket {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <img id="ticket" src="background.png" alt="Gender reveal ticket">
+        <canvas id="scratchCanvas"></canvas>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('scratchCanvas');
+        const ctx = canvas.getContext('2d');
+        const ticket = document.getElementById('ticket');
+        const radius = 20;
+        let isDrawing = false;
+
+        function resize() {
+            canvas.width = ticket.offsetWidth;
+            canvas.height = ticket.offsetHeight;
+            ctx.fillStyle = '#C0C0C0';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+
+        function scratch(x, y) {
+            ctx.globalCompositeOperation = 'destination-out';
+            ctx.beginPath();
+            ctx.arc(x, y, radius, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        canvas.addEventListener('mousedown', (e) => {
+            isDrawing = true;
+            scratch(e.offsetX, e.offsetY);
+        });
+
+        canvas.addEventListener('mousemove', (e) => {
+            if (!isDrawing) return;
+            scratch(e.offsetX, e.offsetY);
+        });
+
+        document.addEventListener('mouseup', () => {
+            isDrawing = false;
+        });
+
+        window.addEventListener('resize', resize);
+        window.addEventListener('load', resize);
+    </script>
+</body>
+</html>
