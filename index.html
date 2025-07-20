@@ -147,17 +147,22 @@
 
     window.addEventListener('load', () => {
       const zones = document.querySelectorAll('.scratch-zone');
+// First four spots contain two girls and two boys in random order
+const revealQueue = ['girl.png', 'girl.png', 'boy.png', 'boy.png'];
+for (let i = revealQueue.length - 1; i > 0; i--) {
+  const j = Math.floor(Math.random() * (i + 1));
+  [revealQueue[i], revealQueue[j]] = [revealQueue[j], revealQueue[i]];
+}
 
-      // Prepare two girls and two boys for the first four reveals
-      const revealQueue = ['girl.png', 'girl.png', 'boy.png', 'boy.png'];
-      for (let i = revealQueue.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [revealQueue[i], revealQueue[j]] = [revealQueue[j], revealQueue[i]];
-      }
+// Add tie-breaker image (always a girl) as the fifth
+revealQueue.push('girl.png');
 
-      let revealedCount = 0;
+let revealedCount = 0;
 
-      zones.forEach(zone => {
+zones.forEach((zone, idx) => {
+  const image = revealQueue[idx];
+  // your zone logic using `image` here
+});
         const img = zone.querySelector('img');
         const canvas = zone.querySelector('canvas');
 
