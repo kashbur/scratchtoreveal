@@ -147,12 +147,15 @@
 
     window.addEventListener('load', () => {
       const zones = document.querySelectorAll('.scratch-zone');
-      const images = ['girl.png', 'girl.png', 'girl.png', 'boy.png', 'boy.png'];
-
-      for (let i = images.length - 1; i > 0; i--) {
+      // First four spots contain two girls and two boys in random order
+      const firstFour = ['girl.png', 'girl.png', 'boy.png', 'boy.png'];
+      for (let i = firstFour.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
-        [images[i], images[j]] = [images[j], images[i]];
+        [firstFour[i], firstFour[j]] = [firstFour[j], firstFour[i]];
       }
+
+      // Fifth spot is always the tie breaker (girl)
+      const images = [...firstFour, 'girl.png'];
 
       zones.forEach((zone, idx) => {
         const img = zone.querySelector('img');
