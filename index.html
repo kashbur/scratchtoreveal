@@ -4,6 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Gender Reveal Scratcher</title>
+  <link rel="preload" href="girl.png" as="image">
+  <link rel="preload" href="boy.png" as="image">
   <style>
     html, body {
       margin: 0;
@@ -41,10 +43,16 @@
       height: 80%;
       transform: translate(-50%, -50%);
       display: block;
+      opacity: 0;
+      transition: opacity 0.3s ease;
     }
 
     .scratch-zone img:not([src]) {
       display: none;
+    }
+
+    .scratch-zone img[data-revealed="true"] {
+      opacity: 1;
     }
 
     .scratch-zone canvas {
@@ -85,6 +93,11 @@
   <script>
     const radius = 20;
     const overlaySrc = 'circle.png';
+
+    ["girl.png", "boy.png"].forEach(src => {
+      const img = new Image();
+      img.src = src;
+    });
 
     function setupZone(zone) {
       const canvas = zone.querySelector('canvas');
