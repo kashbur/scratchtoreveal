@@ -112,13 +112,27 @@
     const radius = 20;
     const overlaySrc = 'circle.png';
 
-    function fitText(el, min = 32, max = 127) {
+   function fitText(el, min = 32, max = 127) {
+  const testSpan = document.createElement("span");
+  testSpan.style.visibility = "hidden";
+  testSpan.style.position = "absolute";
+  testSpan.style.whiteSpace = "nowrap";
+  testSpan.style.fontFamily = getComputedStyle(el).fontFamily;
+  testSpan.style.textTransform = getComputedStyle(el).textTransform;
+  testSpan.textContent = el.textContent;
+  document.body.appendChild(testSpan);
+
   let fontSize = max;
-  el.style.fontSize = fontSize + 'px';
-  while ((el.scrollWidth > el.clientWidth || el.scrollHeight > el.clientHeight) && fontSize > min) {
+  while (fontSize >= min) {
+    testSpan.style.fontSize = fontSize + "px";
+    if (testSpan.offsetWidth <= el.clientWidth && testSpan.offsetHeight <= el.clientHeight) {
+      break;
+    }
     fontSize -= 1;
-    el.style.fontSize = fontSize + 'px';
   }
+
+  el.style.fontSize = fontSize + "px";
+  document.body.removeChild(testSpan);
 }
 
 function initName() {
@@ -126,12 +140,11 @@ function initName() {
   const params = new URLSearchParams(window.location.search);
   const name = params.get('name') || '';
   el.textContent = name.toUpperCase();
-  const fit = () => fitText(el, 32, 127); // adjust min/max if needed
-  fit();
-  document.fonts && document.fonts.ready.then(fit);
+  const fit = () => fitText(el, 32, 127);
+  document.fonts.ready.then(fit);
   window.addEventListener('resize', fit);
+  fit();
 }
-
     ["girl.png", "boy.png"].forEach(src => {
       const img = new Image();
       img.src = src;
