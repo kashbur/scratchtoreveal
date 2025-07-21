@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Gender Reveal Scratcher</title>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2&display=swap" rel="stylesheet">
   <link rel="preload" href="girl.png" as="image">
   <link rel="preload" href="boy.png" as="image">
   <style>
@@ -21,6 +22,21 @@
       position: relative;
       width: 90vw;
       max-width: 400px;
+    }
+
+    #name-container {
+      position: absolute;
+      left: 13.95%;
+      top: 36.94%;
+      width: 74.48%;
+      height: 6.88%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      font-family: 'Baloo 2', cursive;
+      white-space: nowrap;
+      overflow: hidden;
     }
 
     #ticket {
@@ -68,6 +84,7 @@
 <body>
   <div id="container">
     <img id="ticket" src="background.png" alt="Gender reveal ticket" />
+    <div id="name-container"></div>
     <div class="scratch-zone" style="left: 7.00%; top: 65.58%;">
       <img alt="Reveal" />
       <canvas></canvas>
@@ -93,6 +110,26 @@
   <script>
     const radius = 20;
     const overlaySrc = 'circle.png';
+
+    function fitText(el) {
+      let fontSize = el.clientHeight;
+      el.style.fontSize = fontSize + 'px';
+      while ((el.scrollWidth > el.clientWidth || el.scrollHeight > el.clientHeight) && fontSize > 0) {
+        fontSize -= 1;
+        el.style.fontSize = fontSize + 'px';
+      }
+    }
+
+    function initName() {
+      const el = document.getElementById('name-container');
+      const params = new URLSearchParams(window.location.search);
+      const name = params.get('name') || '';
+      el.textContent = name;
+      const fit = () => fitText(el);
+      fit();
+      document.fonts && document.fonts.ready.then(fit);
+      window.addEventListener('resize', fit);
+    }
 
     ["girl.png", "boy.png"].forEach(src => {
       const img = new Image();
@@ -163,6 +200,7 @@
     }
 
     window.addEventListener('load', () => {
+      initName();
       const zones = document.querySelectorAll('.scratch-zone');
 
       // First four spots contain two girls and two boys in random order
