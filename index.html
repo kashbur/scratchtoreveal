@@ -24,21 +24,21 @@
       max-width: 400px;
     }
 
-    #name-container {
-      position: absolute;
-      left: 13.95%;
-      top: 36.94%;
-      width: 74.48%;
-      height: 6.88%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      font-family: 'Baloo 2', cursive;
-      text-transform: uppercase;
-      white-space: nowrap;
-      overflow: hidden;
-    }
+#name-container {
+  position: absolute;
+  left: 7.16%;
+  top: 36.94%;
+  width: 85.66%;
+  height: 6.88%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-family: 'Baloo 2', cursive;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+}
 
     #ticket {
       width: 100%;
@@ -112,25 +112,25 @@
     const radius = 20;
     const overlaySrc = 'circle.png';
 
-    function fitText(el) {
-      let fontSize = 1000;
-      el.style.fontSize = fontSize + 'px';
-      while ((el.scrollWidth > el.clientWidth || el.scrollHeight > el.clientHeight) && fontSize > 0) {
-        fontSize -= 1;
-        el.style.fontSize = fontSize + 'px';
-      }
-    }
+    function fitText(el, min = 32, max = 127) {
+  let fontSize = max;
+  el.style.fontSize = fontSize + 'px';
+  while ((el.scrollWidth > el.clientWidth || el.scrollHeight > el.clientHeight) && fontSize > min) {
+    fontSize -= 1;
+    el.style.fontSize = fontSize + 'px';
+  }
+}
 
-    function initName() {
-      const el = document.getElementById('name-container');
-      const params = new URLSearchParams(window.location.search);
-      const name = params.get('name') || '';
-      el.textContent = name.toUpperCase();
-      const fit = () => fitText(el);
-      fit();
-      document.fonts && document.fonts.ready.then(fit);
-      window.addEventListener('resize', fit);
-    }
+function initName() {
+  const el = document.getElementById('name-container');
+  const params = new URLSearchParams(window.location.search);
+  const name = params.get('name') || '';
+  el.textContent = name.toUpperCase();
+  const fit = () => fitText(el, 32, 127); // adjust min/max if needed
+  fit();
+  document.fonts && document.fonts.ready.then(fit);
+  window.addEventListener('resize', fit);
+}
 
     ["girl.png", "boy.png"].forEach(src => {
       const img = new Image();
