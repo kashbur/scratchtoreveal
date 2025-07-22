@@ -140,7 +140,10 @@ function initName() {
   const params = new URLSearchParams(window.location.search);
   const name = params.get('name') || '';
   el.textContent = name.toUpperCase();
-  const fit = () => fitText(el, 32, 127);
+  const fit = () => {
+    const max = Math.max(el.clientWidth, el.clientHeight);
+    fitText(el, 32, max);
+  };
   document.fonts.ready.then(fit);
   window.addEventListener('resize', fit);
   fit();
