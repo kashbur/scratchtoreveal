@@ -40,7 +40,6 @@
   text-align: center;
   color: #4f4e4c;
   font-family: 'Kindly', cursive;
-  text-transform: uppercase;
   white-space: nowrap;
   overflow: hidden;
 }
@@ -144,7 +143,7 @@ function initName() {
   const el = document.getElementById('name-container');
   const params = new URLSearchParams(window.location.search);
   const name = params.get('name') || '';
-  el.textContent = name.toUpperCase();
+  el.textContent = name;
   const fit = () => {
    const container = document.getElementById('container');
 const fullHeight = container.clientHeight;
