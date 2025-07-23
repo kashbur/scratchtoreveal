@@ -4,10 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Gender Reveal Scratcher</title>
-  <link href="https://fonts.googleapis.com/css2?family=Baloo+2&display=swap" rel="stylesheet">
+  <link rel="preload" href="Kindly.otf" as="font" type="font/otf" crossorigin>
   <link rel="preload" href="girl.png" as="image">
   <link rel="preload" href="boy.png" as="image">
   <style>
+    @font-face {
+      font-family: 'Kindly';
+      src: url('Kindly.otf') format('opentype');
+    }
     html, body {
       margin: 0;
       padding: 0; 
@@ -35,7 +39,7 @@
   align-items: center;
   text-align: center;
   color: #4f4e4c;
-  font-family: 'Baloo 2', cursive;
+  font-family: 'Kindly', cursive;
   text-transform: uppercase;
   white-space: nowrap;
   overflow: hidden;
