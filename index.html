@@ -142,8 +142,10 @@ function initName() {
   const name = params.get('name') || '';
   el.textContent = name.toUpperCase();
   const fit = () => {
-    const max = Math.max(el.clientWidth, el.clientHeight);
-    fitText(el, 32, max);
+    const containerHeight = el.clientHeight;
+    const initialSize = containerHeight * 0.0795;
+    el.style.fontSize = initialSize + 'px';
+    fitText(el, 1, initialSize);
   };
   document.fonts.ready.then(fit);
   window.addEventListener('resize', fit);
