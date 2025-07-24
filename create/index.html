@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Create Gender Reveal Link</title>
   <link rel="preload" href="../Penmanship.ttf" as="font" type="font/ttf" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
   <style>
     @font-face {
       font-family: 'Penmanship';
@@ -13,13 +14,14 @@
     }
 
     body {
-      font-family: sans-serif;
-      background: #fafafa;
+      font-family: 'Quicksand', sans-serif;
+      background: linear-gradient(to bottom right, #fffafc, #f9f9ff);
       display: flex;
       justify-content: center;
       align-items: flex-start;
       height: 100vh;
       padding: 2rem;
+      margin: 0;
       box-sizing: border-box;
     }
 
@@ -33,35 +35,38 @@
     .form-box {
       background: white;
       padding: 2rem;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      border-radius: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
       width: 400px;
       flex-shrink: 0;
     }
 
     h1 {
       text-align: center;
-      font-size: 1.5rem;
+      font-size: 1.6rem;
       margin-bottom: 1.5rem;
     }
 
     label {
       display: block;
       margin-top: 1rem;
+      font-weight: 600;
     }
 
     input, select {
       width: 100%;
-      padding: 0.5rem;
-      margin-top: 0.25rem;
-      border: 1px solid #ccc;
-      border-radius: 5px;
+      padding: 0.6rem;
+      margin-top: 0.3rem;
+      border: 1px solid #f9d6da;
+      border-radius: 10px;
+      font-size: 1rem;
     }
 
     #img-help {
       cursor: pointer;
       margin-left: 0.3rem;
-      background: #ddd;
+      background: #f9d6da;
+      color: #4f4e4c;
       border-radius: 50%;
       padding: 0.1rem 0.4rem;
       font-weight: bold;
@@ -70,48 +75,53 @@
     }
 
     #tooltip {
-      background: #f2f2f2;
+      background: #fefefe;
       border: 1px solid #ccc;
       padding: 0.5rem;
       margin-top: 0.5rem;
-      border-radius: 5px;
+      border-radius: 8px;
       font-size: 0.85rem;
       line-height: 1.4;
       display: none;
     }
 
-    button {
-      margin-top: 1.5rem;
-      width: 100%;
-      padding: 0.75rem;
-      background-color: #4f4e4c;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      font-size: 1rem;
-      cursor: pointer;
-    }
-
     #result {
-      margin-top: 1.25rem;
+      margin-top: 1.5rem;
       word-break: break-word;
       text-align: center;
-      font-size: 0.9rem;
+      font-size: 1rem;
+      color: #4f4e4c;
+    }
+
+    #result a {
+      color: #337ab7;
+      text-decoration: none;
+    }
+
+    #result a:hover {
+      text-decoration: underline;
     }
 
     .preview-box {
       flex: 1;
-      border-radius: 10px;
+      border-radius: 15px;
       overflow: hidden;
       border: 1px solid #ccc;
       background: white;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
     }
 
     iframe {
       width: 100%;
       height: 700px;
       border: none;
+    }
+
+    small {
+      display: block;
+      margin-top: 0.3rem;
+      font-size: 0.75rem;
+      color: #888;
     }
   </style>
 </head>
@@ -135,11 +145,9 @@
           <option value="plain">Plain</option>
         </select>
 
-<label for="msg">Reveal Message</label>
-<input type="text" id="msg" name="msg" />
-<small style="display: block; margin-top: 0.25rem; font-size: 0.8rem; color: #666;">
-  *This message appears only after scratching the image.
-</small>
+        <label for="msg">Reveal Message</label>
+        <input type="text" id="msg" name="msg" />
+        <small>*This message appears only after scratching the image.</small>
 
         <label for="imgUrl">
           Reveal Image URL
@@ -153,8 +161,6 @@
           </div>
         </label>
         <input type="text" id="imgUrl" name="img" />
-
-        <button type="submit">Generate Link</button>
       </form>
 
       <div id="result"></div>
@@ -210,12 +216,8 @@
 
     form.addEventListener('input', updatePreview);
     form.addEventListener('change', updatePreview);
-    form.addEventListener('submit', e => {
-      e.preventDefault();
-      updatePreview();
-    });
 
-    updatePreview(); // initial
+    updatePreview(); // Trigger on load
   </script>
 </body>
 </html>
