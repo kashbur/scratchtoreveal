@@ -98,13 +98,23 @@
       width: 100vw;
       height: 100vh;
       background-color: rgba(0,0,0,0.8);
-      display: none;
+      display: flex;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 0.5s ease;
       flex-direction: column;
       justify-content: center;
       align-items: center;
       text-align: center;
       z-index: 1000;
       overflow: hidden;
+    }
+
+    #reveal-overlay.visible {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
     }
 
     #reveal-overlay h1 {
@@ -201,7 +211,7 @@
       } else {
         imgEl.style.display = 'none';
       }
-      overlay.style.display = 'flex';
+      overlay.classList.add('visible');
       const base = isBoy ? '#87cefa' : '#ff69b4';
       launchConfetti([base, '#ffd700', '#ffffff']);
     }
