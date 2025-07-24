@@ -208,9 +208,16 @@
 
       result.textContent = 'Generating short link...';
       try {
-        const res = await fetch('https://is.gd/create.php?format=simple&url=' + encodeURIComponent(fullUrl));
+        const res = await fetch('/.netlify/functions/shorten-url', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ long_url: fullUrl })
+        });
         if (!res.ok) throw new Error('Shortener error');
-        const shortUrl = (await res.text()).trim();
+        const data = await res.json();
+        const shortUrl = data.short_url;
         result.innerHTML = `<p>Your custom link:</p><a href="${shortUrl}" target="_blank">${shortUrl}</a>`;
       } catch (e) {
         result.innerHTML = `<p>Your custom link:</p><a href="${fullUrl}" target="_blank">${fullUrl}</a>`;
