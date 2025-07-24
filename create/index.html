@@ -111,6 +111,16 @@
       max-width: 100%;
       margin-top: 0.5rem;
     }
+
+    .hint {
+      font-size: 0.8rem;
+      color: #666;
+      margin-top: 0.25rem;
+    }
+
+    .hint-star {
+      font-size: 0.8rem;
+    }
   </style>
 </head>
 <body>
@@ -133,8 +143,9 @@
           <option value="plain">Plain</option>
         </select>
 
-        <label for="msg">Reveal Message</label>
+        <label for="msg">Reveal Message <span class="hint-star">*</span></label>
         <input type="text" id="msg" name="msg" />
+        <p class="hint">*Preview will show after scratch off</p>
 
         <label for="imgInput">Reveal Image</label>
         <div id="drop-area">
