@@ -143,15 +143,20 @@
 
       const finalUrl = url + params.toString();
       preview.src = finalUrl;
+
+      result.innerHTML = `<p>Your custom link:</p><a href="${finalUrl}" target="_blank">${finalUrl}</a>`;
     }
 
+    // Listen to both input and change for full reactivity
     form.addEventListener('input', updatePreview);
+    form.addEventListener('change', updatePreview);
+
     form.addEventListener('submit', function (e) {
       e.preventDefault();
-      result.innerHTML = `<p>Your custom link:</p><a href="${preview.src}" target="_blank">${preview.src}</a>`;
+      updatePreview();
     });
 
-    updatePreview(); // Initialize
+    updatePreview(); // Load default preview
   </script>
 </body>
 </html>
