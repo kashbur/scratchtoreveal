@@ -58,10 +58,26 @@
       border-radius: 5px;
     }
 
-
     #img-help {
-      cursor: help;
-      margin-left: 0.25rem;
+      cursor: pointer;
+      margin-left: 0.3rem;
+      background: #ddd;
+      border-radius: 50%;
+      padding: 0.1rem 0.4rem;
+      font-weight: bold;
+      display: inline-block;
+      font-size: 0.8rem;
+    }
+
+    #tooltip {
+      background: #f2f2f2;
+      border: 1px solid #ccc;
+      padding: 0.5rem;
+      margin-top: 0.5rem;
+      border-radius: 5px;
+      font-size: 0.85rem;
+      line-height: 1.4;
+      display: none;
     }
 
     button {
@@ -97,7 +113,6 @@
       height: 700px;
       border: none;
     }
-
   </style>
 </head>
 <body>
@@ -123,7 +138,17 @@
         <label for="msg">Reveal Message</label>
         <input type="text" id="msg" name="msg" />
 
-        <label for="imgUrl">Reveal Image URL <span id="img-help" title="Upload your image to a service like Imgur and paste the URL here.">?</span></label>
+        <label for="imgUrl">
+          Reveal Image URL
+          <span id="img-help" onclick="toggleTooltip()">?</span>
+          <div id="tooltip">
+            <strong>How to upload to Imgur:</strong><br>
+            1. Go to <a href="https://imgur.com/upload" target="_blank">imgur.com/upload</a><br>
+            2. Upload your image<br>
+            3. Right-click the image and select "Copy Image Address"<br>
+            4. Paste it here
+          </div>
+        </label>
         <input type="text" id="imgUrl" name="img" />
 
         <button type="submit">Generate Link</button>
@@ -143,18 +168,23 @@
     const preview = document.getElementById('live-preview');
     const imgUrlInput = document.getElementById('imgUrl');
 
+    function toggleTooltip() {
+      const tip = document.getElementById('tooltip');
+      tip.style.display = tip.style.display === 'none' ? 'block' : 'none';
+    }
+
     async function updatePreview() {
       const name = document.getElementById('name').value.trim();
       const f = document.getElementById('f').value;
       const style = document.getElementById('style').value;
       const msg = document.getElementById('msg').value.trim();
+      const img = imgUrlInput.value.trim();
 
       const params = new URLSearchParams();
       if (name) params.append('name', name);
       if (f) params.append('f', f);
       if (style) params.append('style', style);
       if (msg) params.append('msg', msg);
-      const img = imgUrlInput.value.trim();
       if (img) params.append('img', img);
 
       const fullUrl = `https://scratchtoreveal1.netlify.app/?${params.toString()}`;
@@ -164,15 +194,12 @@
       try {
         const res = await fetch('/.netlify/functions/shorten-url', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ long_url: fullUrl })
         });
         if (!res.ok) throw new Error('Shortener error');
         const data = await res.json();
-        const shortUrl = data.short_url;
-        result.innerHTML = `<p>Your custom link:</p><a href="${shortUrl}" target="_blank">${shortUrl}</a>`;
+        result.innerHTML = `<p>Your custom link:</p><a href="${data.short_url}" target="_blank">${data.short_url}</a>`;
       } catch (e) {
         result.innerHTML = `<p>Your custom link:</p><a href="${fullUrl}" target="_blank">${fullUrl}</a>`;
       }
