@@ -85,6 +85,16 @@
       display: none;
     }
 
+    #imgError {
+      color: #d9534f;
+      font-size: 0.85rem;
+      margin-top: 0.3rem;
+    }
+
+    #imgError.success {
+      color: #28a745;
+    }
+
     #result {
       margin-top: 1.5rem;
       word-break: break-word;
@@ -161,6 +171,8 @@
           </div>
         </label>
         <input type="text" id="imgUrl" name="img" />
+        <button type="button" id="validateImg" style="margin-top:0.5rem">Check Image</button>
+        <div id="imgError" aria-live="polite"></div>
         <small>Optional – leave blank if you don't want a custom image.</small>
       </form>
 
@@ -177,10 +189,33 @@
     const result = document.getElementById('result');
     const preview = document.getElementById('live-preview');
     const imgUrlInput = document.getElementById('imgUrl');
+    const validateBtn = document.getElementById('validateImg');
+    const imgError = document.getElementById('imgError');
 
     function toggleTooltip() {
       const tip = document.getElementById('tooltip');
       tip.style.display = tip.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function validateImage() {
+      const url = imgUrlInput.value.trim();
+      imgError.classList.remove('success');
+      imgError.textContent = '';
+      if (!url) {
+        imgError.textContent = 'Please enter an image URL.';
+        return;
+      }
+      imgError.textContent = 'Checking...';
+      const test = new Image();
+      test.onload = () => {
+        imgError.textContent = 'Valid image link!';
+        imgError.classList.add('success');
+        updatePreview();
+      };
+      test.onerror = () => {
+        imgError.textContent = 'This URL does not appear to be an image.';
+      };
+      test.src = url;
     }
 
     async function updatePreview() {
@@ -217,6 +252,7 @@
 
     form.addEventListener('input', updatePreview);
     form.addEventListener('change', updatePreview);
+    validateBtn.addEventListener('click', validateImage);
 
     updatePreview(); // Trigger on load
   </script>
