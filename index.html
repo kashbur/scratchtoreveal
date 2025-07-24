@@ -378,6 +378,18 @@ fitText(el, 32, initialSize * 1.3);
     document.addEventListener('DOMContentLoaded', () => {
       applyFont();
       initName();
+
+      const params = new URLSearchParams(window.location.search);
+      const finalReveal = params.get('f') === '1' ? 'boy.png' : 'girl.png';
+      const customMessage = params.get('msg');
+      const customImg = params.get('img');
+      const preview = params.get('preview') === '1';
+
+      if (preview) {
+        showFinalOverlay(finalReveal.includes('boy'), customMessage, customImg);
+        return;
+      }
+
       const zones = document.querySelectorAll('.scratch-zone');
 
       const revealQueue = ['girl.png', 'girl.png', 'boy.png', 'boy.png'];
@@ -385,11 +397,6 @@ fitText(el, 32, initialSize * 1.3);
         const j = Math.floor(Math.random() * (i + 1));
         [revealQueue[i], revealQueue[j]] = [revealQueue[j], revealQueue[i]];
       }
-
-      const params = new URLSearchParams(window.location.search);
-      const finalReveal = params.get('f') === '1' ? 'boy.png' : 'girl.png';
-      const customMessage = params.get('msg');
-      const customImg = params.get('img');
 
       let revealedCount = 0;
 
