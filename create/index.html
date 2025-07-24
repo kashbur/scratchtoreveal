@@ -190,9 +190,78 @@
       font-size: 0.75rem;
       color: #888;
     }
+    .group-box {
+  background-color: #fff0f5; /* blush pink */
+  border: 1px solid #f3c6d1;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  border-radius: 12px;
+  padding: 1rem 1.2rem;
+  margin: 1.5rem 1rem;
+  font-family: sans-serif;
+}
+
+.group-box.blue {
+  background-color: #f0f6ff;
+  border-color: #c3d8f0;
+}
+
+.group-box label {
+  display: block;
+  margin-top: 1rem;
+  font-weight: 600;
+}
+
+.group-box input,
+.group-box select {
+  width: 100%;
+  padding: 0.6rem;
+  margin-top: 0.4rem;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 1rem;
+}
+
+.group-box small {
+  display: block;
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
+  color: #666;
+}
   </style>
 </head>
 <body>
+  <!-- Customization Form -->
+<div class="group-box blush">
+  <label for="name">
+    Title Above the Scratch Area
+    <small>(Name, last name, or special phrase)</small>
+  </label>
+  <input
+    type="text"
+    id="name"
+    name="name"
+    placeholder='e.g. "Baby Miller", "Our Precious Blessing"'
+  />
+  <small>If left blank, it will just say “Baby”.</small>
+
+  <label for="nameStyle">Title Font Style</label>
+  <select id="nameStyle" name="nameStyle">
+    <option value="">Cursive</option>
+    <option value="plain">Plain</option>
+  </select>
+</div>
+
+<div class="group-box blue">
+  <label for="msg">Reveal Message</label>
+  <input type="text" id="msg" name="msg" />
+  <small>*This message appears only after scratching the image.</small>
+
+  <label for="msgStyle">Reveal Message Font Style</label>
+  <select id="msgStyle" name="msgStyle">
+    <option value="">Cursive</option>
+    <option value="plain">Plain</option>
+  </select>
+</div>
   <div class="container">
     <div class="form-box">
       <h1>Customize Your Reveal Link</h1>
