@@ -176,6 +176,10 @@
     }
 
     dropArea.addEventListener('click', () => imgInput.click());
+    dropArea.addEventListener('dragenter', e => {
+      e.preventDefault();
+      dropArea.classList.add('highlight');
+    });
     dropArea.addEventListener('dragover', e => {
       e.preventDefault();
       dropArea.classList.add('highlight');
