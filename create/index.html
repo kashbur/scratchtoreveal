@@ -146,15 +146,23 @@
           <option value="2">Girl</option>
         </select>
 
-        <label for="name">Last Name</label>
-        <input type="text" id="name" name="name" />
+    <label for="name">
+  Title Above the Scratch Area
+  <small>(Name, last name, or special phrase)</small>
+</label>
+<input
+  type="text"
+  id="name"
+  name="name"
+  placeholder='e.g. "Baby Miller", "Our Precious Blessing"'
+/>
+<small>If left blank, it will just say “Baby”.</small>
 
-        <label for="nameStyle">Name Font Style</label>
-        <select id="nameStyle" name="nameStyle">
-          <option value="">Cursive</option>
-          <option value="plain">Plain</option>
-        </select>
-
+<label for="nameStyle">Title Font Style</label>
+<select id="nameStyle" name="nameStyle">
+  <option value="">Cursive</option>
+  <option value="plain">Plain</option>
+</select>
         <label for="msg">Reveal Message</label>
         <input type="text" id="msg" name="msg" />
         <small>*This message appears only after scratching the image.</small>
