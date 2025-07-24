@@ -9,3 +9,7 @@ Simple scratchcard demo.
 - `style` – optional text style for the overlay. Use `plain` for a printed look or omit for cursive.
 - `msg` – custom message shown after the final reveal.
 - `img` – URL or data URI of an image displayed with the message.
+
+URL shortening for generated links uses a Netlify serverless function located at
+`/.netlify/functions/shorten-url`.
+
