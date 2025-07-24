@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Customize Your Gender Reveal</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background-color: #f9f9f9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .container {
+      background: white;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 400px;
+    }
+    h1 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+    label {
+      display: block;
+      margin-top: 1rem;
+    }
+    input {
+      width: 100%;
+      padding: 0.5rem;
+      margin-top: 0.25rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      margin-top: 1.5rem;
+      width: 100%;
+      padding: 0.75rem;
+      background-color: #4f4e4c;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    #result {
+      margin-top: 1rem;
+      word-break: break-word;
+      font-size: 0.9rem;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Create Your Gender Reveal Link</h1>
+    <form id="linkForm">
+      <label for="name">Baby's Name or Last Name</label>
+      <input type="text" id="name" name="name" required />
+
+      <label for="message">Optional Message</label>
+      <input type="text" id="message" name="message" placeholder="(Optional)" />
+
+      <label for="img">Optional Image URL</label>
+      <input type="text" id="img" name="img" placeholder="(Optional)" />
+
+      <button type="submit">Generate Link</button>
+    </form>
+
+    <div id="result"></div>
+  </div>
+
+  <script>
+    const form = document.getElementById('linkForm');
+    const result = document.getElementById('result');
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const name = encodeURIComponent(document.getElementById('name').value.trim());
+      const msg = encodeURIComponent(document.getElementById('message').value.trim());
+      const img = encodeURIComponent(document.getElementById('img').value.trim());
+
+      let url = `https://scratchtoreveal1.netlify.app/?name=${name}`;
+      if (msg) url += `&msg=${msg}`;
+      if (img) url += `&img=${img}`;
+
+      result.innerHTML = `
+        <p>Your link:</p>
+        <a href="${url}" target="_blank">${url}</a>
+      `;
+    });
+  </script>
+</body>
+</html>
