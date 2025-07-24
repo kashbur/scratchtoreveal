@@ -238,7 +238,9 @@ fitText(el, 32, initialSize); // give a decent min size
         [revealQueue[i], revealQueue[j]] = [revealQueue[j], revealQueue[i]];
       }
 
-      // The fifth reveal is always a girl, handled separately
+      // Determine the final reveal using a URL parameter. "1" means boy, "2" means girl.
+      const params = new URLSearchParams(window.location.search);
+      const finalReveal = params.get('f') === '1' ? 'boy.png' : 'girl.png';
 
       let revealedCount = 0;
 
@@ -251,7 +253,7 @@ fitText(el, 32, initialSize); // give a decent min size
           revealedCount++;
           let src;
           if (revealedCount === 5) {
-            src = 'girl.png';
+            src = finalReveal;
           } else {
             src = revealQueue.pop();
           }
