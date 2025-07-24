@@ -168,11 +168,13 @@
     const radius = 20;
     const overlaySrc = 'circle.png';
 
-    function launchConfetti(color) {
+    function launchConfetti(colors) {
       const overlay = document.getElementById('reveal-overlay');
+      if (!Array.isArray(colors)) colors = [colors];
       for (let i = 0; i < 150; i++) {
         const piece = document.createElement('div');
         piece.className = 'confetti';
+        const color = colors[Math.floor(Math.random() * colors.length)];
         piece.style.backgroundColor = color;
         const size = Math.random() * 6 + 4;
         piece.style.width = size + 'px';
@@ -200,7 +202,8 @@
         imgEl.style.display = 'none';
       }
       overlay.style.display = 'flex';
-      launchConfetti(isBoy ? '#87cefa' : '#ff69b4');
+      const base = isBoy ? '#87cefa' : '#ff69b4';
+      launchConfetti([base, '#ffd700', '#ffffff']);
     }
 
     function fitText(el, min = 24, max = 127) {
