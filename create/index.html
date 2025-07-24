@@ -281,7 +281,9 @@
     }
 
     function updatePreview() {
-      preview.src = buildUrl();
+      const url = new URL(buildUrl());
+      url.searchParams.set('preview', '1');
+      preview.src = url.toString();
     }
 
     async function generateLink() {
