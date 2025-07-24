@@ -191,6 +191,7 @@
     const imgUrlInput = document.getElementById('imgUrl');
     const validateBtn = document.getElementById('validateImg');
     const imgError = document.getElementById('imgError');
+    let validateTimeout;
 
     function toggleTooltip() {
       const tip = document.getElementById('tooltip');
@@ -216,6 +217,11 @@
         imgError.textContent = 'Oops! This link doesn\'t lead directly to an image. Right-click the image and choose "Copy Image Address" instead.';
       };
       test.src = url;
+    }
+
+    function scheduleImageValidation() {
+      clearTimeout(validateTimeout);
+      validateTimeout = setTimeout(validateImage, 500);
     }
 
     async function updatePreview() {
@@ -252,6 +258,8 @@
 
     form.addEventListener('input', updatePreview);
     form.addEventListener('change', updatePreview);
+    imgUrlInput.addEventListener('input', scheduleImageValidation);
+    imgUrlInput.addEventListener('change', validateImage);
     validateBtn.addEventListener('click', validateImage);
 
     updatePreview(); // Trigger on load
