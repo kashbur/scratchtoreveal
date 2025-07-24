@@ -130,7 +130,7 @@
     const preview = document.getElementById('live-preview');
 
     function updatePreview() {
-      const name = encodeURIComponent(document.getElementById('name').value.trim());
+      const name = document.getElementById('name').value.trim();
       const f = document.getElementById('f').value;
       const style = document.getElementById('style').value;
 
