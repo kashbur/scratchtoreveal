@@ -41,6 +41,15 @@
       flex-shrink: 0;
     }
 
+    .form-section {
+      border: 1px solid #f9d6da;
+      background: #fff5f7;
+      border-radius: 10px;
+      padding: 1rem;
+      margin-top: 1rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+
     h1 {
       text-align: center;
       font-size: 1.6rem;
@@ -197,53 +206,62 @@
     <div class="form-box">
       <h1>Customize Your Reveal Link</h1>
       <form id="linkForm">
-        <label for="f">Boy or Girl?</label>
-        <select id="f" name="f" required>
-          <option value="1">Boy</option>
-          <option value="2">Girl</option>
-        </select>
+        <div class="form-section">
+          <label for="f">Boy or Girl?</label>
+          <select id="f" name="f" required>
+            <option value="1">Boy</option>
+            <option value="2">Girl</option>
+          </select>
+        </div>
 
-    <label for="name">
-  Title Above the Scratch Area
-  <small>(Name, last name, or special phrase)</small>
-</label>
-<input
-  type="text"
-  id="name"
-  name="name"
-  placeholder='e.g. "Baby Miller", "Our Precious Blessing"'
-/>
-<small>If left blank, it will just say “Baby”.</small>
+        <div class="form-section">
+          <label for="name">
+            Title Above the Scratch Area
+            <small>(Name, last name, or special phrase)</small>
+          </label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            placeholder='e.g. "Baby Miller", "Our Precious Blessing"'
+          />
+          <small>If left blank, it will just say “Baby”.</small>
 
-<label for="nameStyle">Title Font Style</label>
-<select id="nameStyle" name="nameStyle">
-  <option value="">Cursive</option>
-  <option value="plain">Plain</option>
-</select>
-        <label for="msg">Reveal Message</label>
-        <input type="text" id="msg" name="msg" />
-        <small>*This message appears only after scratching the image.</small>
+          <label for="nameStyle">Title Font Style</label>
+          <select id="nameStyle" name="nameStyle">
+            <option value="">Cursive</option>
+            <option value="plain">Plain</option>
+          </select>
+        </div>
 
-        <label for="msgStyle">Reveal Message Font Style</label>
-        <select id="msgStyle" name="msgStyle">
-          <option value="">Cursive</option>
-          <option value="plain">Plain</option>
-        </select>
+        <div class="form-section">
+          <label for="msg">Reveal Message</label>
+          <input type="text" id="msg" name="msg" />
+          <small>*This message appears only after scratching the image.</small>
 
-        <label for="imgUrl">
-          Reveal Image URL
-          <span id="img-help" onclick="toggleTooltip()">?</span>
-          <div id="tooltip">
-            <strong>How to upload to Imgur:</strong><br>
-            1. Go to <a href="https://imgur.com/upload" target="_blank">imgur.com/upload</a><br>
-            2. Upload your image<br>
-            3. Right-click the image and select "Copy Image Address"<br>
-            4. Paste it here
-          </div>
-        </label>
-        <input type="text" id="imgUrl" name="img" />
-        <div id="imgError" aria-live="polite"></div>
-        <small>Optional – leave blank if you don't want a custom image.</small>
+          <label for="msgStyle">Reveal Message Font Style</label>
+          <select id="msgStyle" name="msgStyle">
+            <option value="">Cursive</option>
+            <option value="plain">Plain</option>
+          </select>
+        </div>
+
+        <div class="form-section">
+          <label for="imgUrl">
+            Reveal Image URL
+            <span id="img-help" onclick="toggleTooltip()">?</span>
+            <div id="tooltip">
+              <strong>How to upload to Imgur:</strong><br>
+              1. Go to <a href="https://imgur.com/upload" target="_blank">imgur.com/upload</a><br>
+              2. Upload your image<br>
+              3. Right-click the image and select "Copy Image Address"<br>
+              4. Paste it here
+            </div>
+          </label>
+          <input type="text" id="imgUrl" name="img" />
+          <div id="imgError" aria-live="polite"></div>
+          <small>Optional – leave blank if you don't want a custom image.</small>
+        </div>
       </form>
       <div class="button-row">
         <button type="button" id="generate">Generate URL</button>
