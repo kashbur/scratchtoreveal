@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Customization Form Snippet</title>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Quicksand', 'Segoe UI', Tahoma, sans-serif;
+      background: #f7f7f7;
+      padding: 1rem;
+    }
+
+    .custom-form {
+      max-width: 480px;
+      margin: auto;
+    }
+
+    .form-section {
+      border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+      padding: 1rem 1.2rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .title-group {
+      background: #fbeef2; /* blush pink */
+      border: 1px solid #f9d6da;
+    }
+
+    .reveal-group {
+      background: #e5f2ff; /* soft blue */
+      border: 1px solid #cce4f7;
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      margin-top: 0.6rem;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 0.6rem;
+      margin-top: 0.3rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 1rem;
+      box-sizing: border-box;
+    }
+
+    small {
+      display: block;
+      margin-top: 0.3rem;
+      font-size: 0.8rem;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <form class="custom-form">
+    <div class="form-section title-group">
+      <label for="name">Title Above the Scratch Area</label>
+      <small>Name, last name, or special phrase</small>
+      <input type="text" id="name" placeholder='e.g. "Baby Miller", "Our Precious Blessing"' />
+      <small>If left blank, it will just say 'Baby'.</small>
+
+      <label for="nameStyle">Title Font Style</label>
+      <select id="nameStyle">
+        <option value="cursive">Cursive</option>
+        <option value="plain">Plain</option>
+      </select>
+    </div>
+
+    <div class="form-section reveal-group">
+      <label for="revealMsg">Reveal Message</label>
+      <input type="text" id="revealMsg" />
+      <small>*This message appears only after scratching the image.</small>
+
+      <label for="msgStyle">Reveal Message Font Style</label>
+      <select id="msgStyle">
+        <option value="cursive">Cursive</option>
+        <option value="plain">Plain</option>
+      </select>
+    </div>
+  </form>
+</body>
+</html>
