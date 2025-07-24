@@ -400,13 +400,13 @@ fitText(el, 32, initialSize * 1.3);
       const preview = params.get('preview') === '1';
 
       if (preview) {
-        const btn = document.createElement('button');
-        btn.id = 'preview-btn';
-        btn.textContent = 'Reveal Message';
-        btn.addEventListener('click', () => {
-          showFinalOverlay(finalReveal.includes('boy'), customMessage, customImg);
-        });
-        document.getElementById('container').appendChild(btn);
+const btn = document.createElement('button');
+btn.id = 'preview-btn';
+btn.textContent = 'Reveal Message';
+btn.addEventListener('click', () => {
+  showFinalOverlay(finalReveal.includes('boy'), customMessage, customImg);
+});
+document.getElementById('container').appendChild(btn);
       }
 
       const zones = document.querySelectorAll('.scratch-zone');
