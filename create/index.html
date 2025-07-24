@@ -307,7 +307,7 @@
       validateTimeout = setTimeout(validateImage, 500);
     }
 
-    function buildUrl() {
+    function buildUrl(includePreview = false) {
       const name = document.getElementById('name').value.trim();
       const f = document.getElementById('f').value;
       const nameStyle = document.getElementById('nameStyle').value;
@@ -322,14 +322,13 @@
       if (msgStyle) params.append('msgStyle', msgStyle);
       if (msg) params.append('msg', msg);
       if (img) params.append('img', img);
+      if (includePreview) params.append('preview', '1');
 
       return `https://scratchtoreveal1.netlify.app/?${params.toString()}`;
     }
 
     function updatePreview() {
-      const url = new URL(buildUrl());
-      url.searchParams.set('preview', '1');
-      preview.src = url.toString();
+      preview.src = buildUrl(true);
     }
 
     async function generateLink() {
