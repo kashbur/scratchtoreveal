@@ -191,7 +191,7 @@
 
     function showFinalOverlay(isBoy, message, img) {
       const overlay = document.getElementById('reveal-overlay');
-      overlay.style.backgroundColor = isBoy ? 'rgba(135,206,250,0.8)' : 'rgba(255,182,193,0.8)';
+      overlay.style.backgroundColor = isBoy ? '#87cefa' : '#ffb6c1';
       const msgEl = document.getElementById('reveal-message');
       msgEl.textContent = message || (isBoy ? "We're having a boy!" : "We're having a girl!");
       const imgEl = document.getElementById('reveal-picture');
