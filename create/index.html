@@ -57,6 +57,7 @@
       border: 1px solid #ccc;
       border-radius: 5px;
     }
+
     #drop-area {
       width: 100%;
       padding: 1rem;
@@ -66,10 +67,10 @@
       text-align: center;
       cursor: pointer;
     }
+
     #drop-area.highlight {
       border-color: #777;
     }
-
 
     button {
       margin-top: 1.5rem;
@@ -104,6 +105,12 @@
       height: 700px;
       border: none;
     }
+
+    #drop-preview {
+      display: none;
+      max-width: 100%;
+      margin-top: 0.5rem;
+    }
   </style>
 </head>
 <body>
@@ -128,13 +135,14 @@
 
         <label for="msg">Reveal Message</label>
         <input type="text" id="msg" name="msg" />
-        
+
         <label for="imgInput">Reveal Image</label>
         <div id="drop-area">
           <p id="drop-text">Drop image here or click to choose</p>
-          <img id="drop-preview" alt="" style="display:none; max-width:100%; margin-top:0.5rem;" />
-          <input type="file" id="imgInput" accept="image/*" style="display:none;">
+          <img id="drop-preview" alt="Image preview" />
+          <input type="file" id="imgInput" accept="image/*" style="display:none;" />
         </div>
+
         <button type="submit">Generate Link</button>
       </form>
 
@@ -188,39 +196,35 @@
       const style = document.getElementById('style').value;
       const msg = document.getElementById('msg').value.trim();
 
-      let url = 'https://scratchtoreveal1.netlify.app/?';
       const params = new URLSearchParams();
-
       if (name) params.append('name', name);
       if (f) params.append('f', f);
       if (style) params.append('style', style);
       if (msg) params.append('msg', msg);
       if (imgData) params.append('img', imgData);
 
-      const finalUrl = url + params.toString();
-      preview.src = finalUrl;
+      const fullUrl = `https://scratchtoreveal1.netlify.app/?${params.toString()}`;
+      preview.src = fullUrl;
 
       result.textContent = 'Generating short link...';
       try {
-        const res = await fetch('https://is.gd/create.php?format=simple&url=' + encodeURIComponent(finalUrl));
+        const res = await fetch('https://is.gd/create.php?format=simple&url=' + encodeURIComponent(fullUrl));
         if (!res.ok) throw new Error('Shortener error');
         const shortUrl = (await res.text()).trim();
         result.innerHTML = `<p>Your custom link:</p><a href="${shortUrl}" target="_blank">${shortUrl}</a>`;
       } catch (e) {
-        result.innerHTML = `<p>Your custom link:</p><a href="${finalUrl}" target="_blank">${finalUrl}</a>`;
+        result.innerHTML = `<p>Your custom link:</p><a href="${fullUrl}" target="_blank">${fullUrl}</a>`;
       }
     }
 
-    // Listen to both input and change for full reactivity
     form.addEventListener('input', updatePreview);
     form.addEventListener('change', updatePreview);
-
-    form.addEventListener('submit', function (e) {
+    form.addEventListener('submit', e => {
       e.preventDefault();
       updatePreview();
     });
 
-    updatePreview(); // Load default preview
+    updatePreview(); // initial
   </script>
 </body>
 </html>
