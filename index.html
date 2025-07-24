@@ -7,14 +7,16 @@
   <link rel="preload" href="Kindly.otf" as="font" type="font/otf" crossorigin>
   <link rel="preload" href="girl.png" as="image">
   <link rel="preload" href="boy.png" as="image">
+
   <style>
     @font-face {
       font-family: 'Kindly';
       src: url('Kindly.otf') format('opentype');
     }
+
     html, body {
       margin: 0;
-      padding: 0; 
+      padding: 0;
       height: 100%;
       background-color: #f0f0f0;
       display: flex;
@@ -28,26 +30,27 @@
       max-width: 400px;
     }
 
-#name-container {
-  position: absolute;
-  left: 5%;
-  top: 34.38%;
-  width: 90%;
-  height: 14%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  color: #4f4e4c;
-  font-family: 'Kindly', cursive;
-  white-space: nowrap;
-  overflow: hidden;
-}
-
     #ticket {
       width: 100%;
       height: auto;
       display: block;
+    }
+
+    #name-container {
+      position: absolute;
+      top: 44.5%;
+      left: 5%;
+      width: 90%;
+      height: 12%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      color: #4f4e4c;
+      font-family: 'Kindly', cursive;
+      white-space: nowrap;
+      overflow: hidden;
+      transform: translateY(-50%);
     }
 
     .scratch-zone {
@@ -86,79 +89,64 @@
     }
   </style>
 </head>
+
 <body>
   <div id="container">
     <img id="ticket" src="background.png" alt="Gender reveal ticket" />
     <div id="name-container"></div>
-    <div class="scratch-zone" style="left: 7.00%; top: 65.58%;">
-      <img alt="Reveal" />
-      <canvas></canvas>
-    </div>
-    <div class="scratch-zone" style="left: 37.92%; top: 65.58%;">
-      <img alt="Reveal" />
-      <canvas></canvas>
-    </div>
-    <div class="scratch-zone" style="left: 68.84%; top: 65.58%;">
-      <img alt="Reveal" />
-      <canvas></canvas>
-    </div>
-    <div class="scratch-zone" style="left: 21.61%; top: 80.94%;">
-      <img alt="Reveal" />
-      <canvas></canvas>
-    </div>
-    <div class="scratch-zone" style="left: 54.19%; top: 80.38%;">
-      <img alt="Reveal" />
-      <canvas></canvas>
-    </div>
+
+    <!-- Scratch zones -->
+    <div class="scratch-zone" style="left: 7.00%; top: 65.58%;"><img alt="Reveal" /><canvas></canvas></div>
+    <div class="scratch-zone" style="left: 37.92%; top: 65.58%;"><img alt="Reveal" /><canvas></canvas></div>
+    <div class="scratch-zone" style="left: 68.84%; top: 65.58%;"><img alt="Reveal" /><canvas></canvas></div>
+    <div class="scratch-zone" style="left: 21.61%; top: 80.94%;"><img alt="Reveal" /><canvas></canvas></div>
+    <div class="scratch-zone" style="left: 54.19%; top: 80.38%;"><img alt="Reveal" /><canvas></canvas></div>
   </div>
 
   <script>
-    const radius = 20;
     const overlaySrc = 'circle.png';
+    const radius = 20;
 
-   function fitText(el, min = 32, max = 127) {
-  const testSpan = document.createElement("span");
-  testSpan.style.visibility = "hidden";
-  testSpan.style.position = "absolute";
-  testSpan.style.whiteSpace = "nowrap";
-  testSpan.style.fontFamily = getComputedStyle(el).fontFamily;
-  testSpan.style.textTransform = getComputedStyle(el).textTransform;
-  testSpan.textContent = el.textContent;
-  document.body.appendChild(testSpan);
+    function fitText(el, min = 32, max = 127) {
+      const testSpan = document.createElement("span");
+      testSpan.style.visibility = "hidden";
+      testSpan.style.position = "absolute";
+      testSpan.style.whiteSpace = "nowrap";
+      testSpan.style.fontFamily = getComputedStyle(el).fontFamily;
+      testSpan.style.textTransform = getComputedStyle(el).textTransform;
+      testSpan.textContent = el.textContent;
+      document.body.appendChild(testSpan);
 
-  let fontSize = max;
-  while (fontSize >= min) {
-    testSpan.style.fontSize = fontSize + "px";
-    if (testSpan.offsetWidth <= el.clientWidth && testSpan.offsetHeight <= el.clientHeight) {
-      break;
+      let fontSize = max;
+      while (fontSize >= min) {
+        testSpan.style.fontSize = fontSize + "px";
+        if (
+          testSpan.offsetWidth <= el.clientWidth &&
+          testSpan.offsetHeight <= el.clientHeight
+        ) break;
+        fontSize -= 1;
+      }
+
+      el.style.fontSize = fontSize + "px";
+      document.body.removeChild(testSpan);
     }
-    fontSize -= 1;
-  }
 
-  el.style.fontSize = fontSize + "px";
-  document.body.removeChild(testSpan);
-}
+    function initName() {
+      const el = document.getElementById('name-container');
+      const params = new URLSearchParams(window.location.search);
+      const name = params.get('name') || '';
+      el.textContent = name;
 
-function initName() {
-  const el = document.getElementById('name-container');
-  const params = new URLSearchParams(window.location.search);
-  const name = params.get('name') || '';
-  el.textContent = name;
-  const fit = () => {
-   const container = document.getElementById('container');
-const fullHeight = container.clientHeight;
-const initialSize = fullHeight * 0.0795; // based on 7.95% of full Canva height
-el.style.fontSize = initialSize + 'px';
-fitText(el, 32, initialSize); // give a decent min size
-  };
-  document.fonts.ready.then(fit);
-  window.addEventListener('resize', fit);
-  fit();
-}
-    ["girl.png", "boy.png"].forEach(src => {
-      const img = new Image();
-      img.src = src;
-    });
+      const fit = () => {
+        const containerHeight = el.clientHeight;
+        const maxFontSize = containerHeight * 1.2;
+        fitText(el, 32, maxFontSize);
+      };
+
+      document.fonts.ready.then(fit);
+      window.addEventListener('resize', fit);
+      fit();
+    }
 
     function setupZone(zone) {
       const canvas = zone.querySelector('canvas');
@@ -172,6 +160,7 @@ fitText(el, 32, initialSize); // give a decent min size
         const h = zone.clientHeight;
         canvas.width = w * dpr;
         canvas.height = h * dpr;
+        ctx.setTransform(1, 0, 0, 1, 0, 0); // reset scaling before redraw
         ctx.scale(dpr, dpr);
         ctx.globalCompositeOperation = 'source-over';
         ctx.clearRect(0, 0, w, h);
@@ -199,46 +188,40 @@ fitText(el, 32, initialSize); // give a decent min size
 
       canvas.addEventListener('mousedown', e => {
         drawing = true;
-        const { x, y } = getPos(e);
-        scratch(x, y);
+        scratch(...Object.values(getPos(e)));
       });
 
       canvas.addEventListener('mousemove', e => {
-        if (!drawing) return;
-        const { x, y } = getPos(e);
-        scratch(x, y);
+        if (drawing) scratch(...Object.values(getPos(e)));
       });
 
-      document.addEventListener('mouseup', () => drawing = false);
+      document.addEventListener('mouseup', () => (drawing = false));
 
       canvas.addEventListener('touchstart', e => {
         drawing = true;
-        const { x, y } = getPos(e);
-        scratch(x, y);
+        scratch(...Object.values(getPos(e)));
       });
 
       canvas.addEventListener('touchmove', e => {
-        if (!drawing) return;
-        e.preventDefault();
-        const { x, y } = getPos(e);
-        scratch(x, y);
+        if (drawing) {
+          e.preventDefault();
+          scratch(...Object.values(getPos(e)));
+        }
       });
 
-      document.addEventListener('touchend', () => drawing = false);
+      document.addEventListener('touchend', () => (drawing = false));
     }
 
     window.addEventListener('load', () => {
       initName();
       const zones = document.querySelectorAll('.scratch-zone');
 
-      // First four spots contain two girls and two boys in random order
       const revealQueue = ['girl.png', 'girl.png', 'boy.png', 'boy.png'];
       for (let i = revealQueue.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [revealQueue[i], revealQueue[j]] = [revealQueue[j], revealQueue[i]];
       }
 
-      // Determine the final reveal using a URL parameter. "1" means boy, "2" means girl.
       const params = new URLSearchParams(window.location.search);
       const finalReveal = params.get('f') === '1' ? 'boy.png' : 'girl.png';
 
@@ -251,14 +234,8 @@ fitText(el, 32, initialSize); // give a decent min size
         function reveal() {
           if (img.dataset.revealed) return;
           revealedCount++;
-          let src;
-          if (revealedCount === 5) {
-            src = finalReveal;
-          } else {
-            src = revealQueue.pop();
-          }
-          img.src = src;
-          img.alt = src.includes('girl') ? 'Girl' : 'Boy';
+          img.src = revealedCount === 5 ? finalReveal : revealQueue.pop();
+          img.alt = img.src.includes('girl') ? 'Girl' : 'Boy';
           img.dataset.revealed = 'true';
         }
 
