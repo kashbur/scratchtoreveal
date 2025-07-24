@@ -149,8 +149,14 @@
         <label for="name">Baby’s Name or Last Name</label>
         <input type="text" id="name" name="name" />
 
-        <label for="style">Font Style</label>
-        <select id="style" name="style">
+        <label for="nameStyle">Name Font Style</label>
+        <select id="nameStyle" name="nameStyle">
+          <option value="">Cursive</option>
+          <option value="plain">Plain</option>
+        </select>
+
+        <label for="msgStyle">Message Font Style</label>
+        <select id="msgStyle" name="msgStyle">
           <option value="">Cursive</option>
           <option value="plain">Plain</option>
         </select>
@@ -221,14 +227,16 @@
     async function updatePreview() {
       const name = document.getElementById('name').value.trim();
       const f = document.getElementById('f').value;
-      const style = document.getElementById('style').value;
+      const nameStyle = document.getElementById('nameStyle').value;
+      const msgStyle = document.getElementById('msgStyle').value;
       const msg = document.getElementById('msg').value.trim();
       const img = imgUrlInput.value.trim();
 
       const params = new URLSearchParams();
       if (name) params.append('name', name);
       if (f) params.append('f', f);
-      if (style) params.append('style', style);
+      if (nameStyle) params.append('nameStyle', nameStyle);
+      if (msgStyle) params.append('msgStyle', msgStyle);
       if (msg) params.append('msg', msg);
       if (img) params.append('img', img);
 

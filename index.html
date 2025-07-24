@@ -204,13 +204,17 @@
     // Disable the standard long-press context menu on mobile devices
     document.addEventListener('contextmenu', event => event.preventDefault());
 
+    function getFont(style) {
+      const usePen = style === 'plain' || style === 'penmanship';
+      return usePen ? "'Penmanship', sans-serif" : "'Kindly', cursive";
+    }
+
     function applyFont() {
       const params = new URLSearchParams(window.location.search);
-      const style = params.get('style');
-      const usePen = style === 'plain' || style === 'penmanship';
-      const font = usePen ? "'Penmanship', sans-serif" : "'Kindly', cursive";
-      document.getElementById('name-container').style.fontFamily = font;
-      document.getElementById('reveal-message').style.fontFamily = font;
+      const nameStyle = params.get('nameStyle') || params.get('style');
+      const msgStyle = params.get('msgStyle') || params.get('style');
+      document.getElementById('name-container').style.fontFamily = getFont(nameStyle);
+      document.getElementById('reveal-message').style.fontFamily = getFont(msgStyle);
     }
 
     function launchConfetti(colors, speed = 1) {
