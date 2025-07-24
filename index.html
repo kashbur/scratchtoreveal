@@ -5,12 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Gender Reveal Scratcher</title>
   <link rel="preload" href="Kindly.otf" as="font" type="font/otf" crossorigin>
+  <link rel="preload" href="background.png" as="image" fetchpriority="high">
+  <link rel="preload" href="circle.png" as="image">
   <link rel="preload" href="girl.png" as="image">
   <link rel="preload" href="boy.png" as="image">
   <style>
     @font-face {
       font-family: 'Kindly';
       src: url('Kindly.otf') format('opentype');
+      font-display: swap;
     }
 
     html, body {
@@ -184,14 +187,16 @@ fitText(el, 32, initialSize * 1.3);
       }
 
       overlay.onload = redraw;
+      const ro = new ResizeObserver(redraw);
+      ro.observe(zone);
       window.addEventListener('resize', redraw);
 
       let drawing = false;
 
       function getPos(e) {
         const rect = canvas.getBoundingClientRect();
-        const x = (e.clientX || e.touches[0].clientX) - rect.left;
-        const y = (e.clientY || e.touches[0].clientY) - rect.top;
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
         return { x, y };
       }
 
@@ -202,37 +207,30 @@ fitText(el, 32, initialSize * 1.3);
         ctx.fill();
       }
 
-      canvas.addEventListener('mousedown', e => {
+      function pointerDown(e) {
         drawing = true;
         const { x, y } = getPos(e);
         scratch(x, y);
-      });
+      }
 
-      canvas.addEventListener('mousemove', e => {
-        if (!drawing) return;
-        const { x, y } = getPos(e);
-        scratch(x, y);
-      });
-
-      document.addEventListener('mouseup', () => drawing = false);
-
-      canvas.addEventListener('touchstart', e => {
-        drawing = true;
-        const { x, y } = getPos(e);
-        scratch(x, y);
-      });
-
-      canvas.addEventListener('touchmove', e => {
+      function pointerMove(e) {
         if (!drawing) return;
         e.preventDefault();
         const { x, y } = getPos(e);
         scratch(x, y);
-      });
+      }
 
-      document.addEventListener('touchend', () => drawing = false);
+      function pointerUp() {
+        drawing = false;
+      }
+
+      canvas.addEventListener('pointerdown', pointerDown, { passive: true });
+      canvas.addEventListener('pointermove', pointerMove);
+      document.addEventListener('pointerup', pointerUp);
+      canvas.addEventListener('pointercancel', pointerUp);
     }
 
-    window.addEventListener('load', () => {
+    document.addEventListener('DOMContentLoaded', () => {
       initName();
       const zones = document.querySelectorAll('.scratch-zone');
 
@@ -265,8 +263,7 @@ fitText(el, 32, initialSize * 1.3);
           img.dataset.revealed = 'true';
         }
 
-        canvas.addEventListener('mousedown', reveal);
-        canvas.addEventListener('touchstart', reveal);
+        canvas.addEventListener('pointerdown', reveal, { passive: true });
 
         setupZone(zone);
       });
