@@ -120,10 +120,6 @@
       order: 1;
     }
 
-    #previewBtn {
-      order: 2;
-    }
-
     #copy {
       order: 3;
     }
@@ -185,9 +181,6 @@
       }
       iframe {
         height: 600px;
-      }
-      #previewBtn {
-        order: 0;
       }
     }
 
@@ -254,7 +247,6 @@
       </form>
       <div class="button-row">
         <button type="button" id="generate">Generate URL</button>
-        <button type="button" id="previewBtn">Preview</button>
         <button type="button" id="copy" style="display:none;">Copy to Clipboard</button>
       </div>
       <div id="result"></div>
@@ -272,7 +264,6 @@
     const imgUrlInput = document.getElementById('imgUrl');
     const imgError = document.getElementById('imgError');
     const generateBtn = document.getElementById('generate');
-    const previewBtn = document.getElementById('previewBtn');
     const copyBtn = document.getElementById('copy');
     let validateTimeout;
 
@@ -356,7 +347,6 @@
     form.addEventListener('change', updatePreview);
     imgUrlInput.addEventListener('input', scheduleImageValidation);
     imgUrlInput.addEventListener('change', validateImage);
-    previewBtn.addEventListener('click', updatePreview);
     generateBtn.addEventListener('click', generateLink);
     copyBtn.addEventListener('click', async () => {
       const text = copyBtn.dataset.clipboard;
