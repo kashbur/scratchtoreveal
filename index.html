@@ -287,7 +287,7 @@
     function initName() {
       const el = document.getElementById('name-container');
       const params = new URLSearchParams(window.location.search);
-      const name = params.get('name') || '';
+      const name = params.get('name') || 'Baby';
       el.textContent = name;
       const fit = () => {
         const container = document.getElementById('container');
