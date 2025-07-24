@@ -89,6 +89,9 @@
       display: block;
       opacity: 0;
       transition: opacity 0.3s ease;
+      -webkit-user-select: none; /* prevent long-press selection */
+      user-select: none;
+      -webkit-touch-callout: none; /* disable save image on iOS */
     }
 
     .scratch-zone img:not([src]) {
@@ -197,6 +200,9 @@
   <script>
     const radius = 20;
     const overlaySrc = 'circle.png';
+
+    // Disable the standard long-press context menu on mobile devices
+    document.addEventListener('contextmenu', event => event.preventDefault());
 
     function applyFont() {
       const params = new URLSearchParams(window.location.search);
