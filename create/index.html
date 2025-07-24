@@ -95,12 +95,34 @@
       color: #28a745;
     }
 
+    button {
+      margin-top: 1rem;
+      padding: 0.6rem 1rem;
+      background: #4f4e4c;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: default;
+    }
+
+    #copy {
+      background: #337ab7;
+      margin-left: 0.5rem;
+    }
+
     #result {
-      margin-top: 1.5rem;
+      margin-top: 1rem;
       word-break: break-word;
       text-align: center;
       font-size: 1rem;
       color: #4f4e4c;
+      display: none;
     }
 
     #result a {
@@ -111,7 +133,7 @@
     #result a:hover {
       text-decoration: underline;
     }
-
+  
     .preview-box {
       flex: 1;
       border-radius: 15px;
@@ -180,7 +202,8 @@
         <div id="imgError" aria-live="polite"></div>
         <small>Optional – leave blank if you don't want a custom image.</small>
       </form>
-
+      <button type="button" id="generate">Generate URL</button>
+      <button type="button" id="copy" style="display:none;">Copy to Clipboard</button>
       <div id="result"></div>
     </div>
 
@@ -195,6 +218,8 @@
     const preview = document.getElementById('live-preview');
     const imgUrlInput = document.getElementById('imgUrl');
     const imgError = document.getElementById('imgError');
+    const generateBtn = document.getElementById('generate');
+    const copyBtn = document.getElementById('copy');
     let validateTimeout;
 
     function toggleTooltip() {
@@ -228,7 +253,7 @@
       validateTimeout = setTimeout(validateImage, 500);
     }
 
-    async function updatePreview() {
+    function buildUrl() {
       const name = document.getElementById('name').value.trim();
       const f = document.getElementById('f').value;
       const nameStyle = document.getElementById('nameStyle').value;
@@ -244,9 +269,16 @@
       if (msg) params.append('msg', msg);
       if (img) params.append('img', img);
 
-      const fullUrl = `https://scratchtoreveal1.netlify.app/?${params.toString()}`;
-      preview.src = fullUrl;
+      return `https://scratchtoreveal1.netlify.app/?${params.toString()}`;
+    }
 
+    function updatePreview() {
+      preview.src = buildUrl();
+    }
+
+    async function generateLink() {
+      const fullUrl = buildUrl();
+      result.style.display = 'block';
       result.textContent = 'Generating short link...';
       try {
         const res = await fetch('/.netlify/functions/shorten-url', {
@@ -257,15 +289,30 @@
         if (!res.ok) throw new Error('Shortener error');
         const data = await res.json();
         result.innerHTML = `<p>Your custom link:</p><a href="${data.short_url}" target="_blank">${data.short_url}</a>`;
+        copyBtn.dataset.clipboard = data.short_url;
       } catch (e) {
         result.innerHTML = `<p>Your custom link:</p><a href="${fullUrl}" target="_blank">${fullUrl}</a>`;
+        copyBtn.dataset.clipboard = fullUrl;
       }
+      copyBtn.style.display = 'inline-block';
     }
 
     form.addEventListener('input', updatePreview);
     form.addEventListener('change', updatePreview);
     imgUrlInput.addEventListener('input', scheduleImageValidation);
     imgUrlInput.addEventListener('change', validateImage);
+    generateBtn.addEventListener('click', generateLink);
+    copyBtn.addEventListener('click', async () => {
+      const text = copyBtn.dataset.clipboard;
+      try {
+        await navigator.clipboard.writeText(text);
+        const prev = copyBtn.textContent;
+        copyBtn.textContent = 'Copied!';
+        setTimeout(() => { copyBtn.textContent = prev; }, 2000);
+      } catch (e) {
+        alert('Copy failed');
+      }
+    });
 
     updatePreview(); // Trigger on load
   </script>
