@@ -129,7 +129,7 @@
     const result = document.getElementById('result');
     const preview = document.getElementById('live-preview');
 
-    function updatePreview() {
+    async function updatePreview() {
       const name = document.getElementById('name').value.trim();
       const f = document.getElementById('f').value;
       const style = document.getElementById('style').value;
@@ -144,7 +144,15 @@
       const finalUrl = url + params.toString();
       preview.src = finalUrl;
 
-      result.innerHTML = `<p>Your custom link:</p><a href="${finalUrl}" target="_blank">${finalUrl}</a>`;
+      result.textContent = 'Generating short link...';
+      try {
+        const res = await fetch('https://is.gd/create.php?format=simple&url=' + encodeURIComponent(finalUrl));
+        if (!res.ok) throw new Error('Shortener error');
+        const shortUrl = (await res.text()).trim();
+        result.innerHTML = `<p>Your custom link:</p><a href="${shortUrl}" target="_blank">${shortUrl}</a>`;
+      } catch (e) {
+        result.innerHTML = `<p>Your custom link:</p><a href="${finalUrl}" target="_blank">${finalUrl}</a>`;
+      }
     }
 
     // Listen to both input and change for full reactivity
