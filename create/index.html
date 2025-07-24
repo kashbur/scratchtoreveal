@@ -17,18 +17,26 @@
       background: #fafafa;
       display: flex;
       justify-content: center;
-      align-items: center;
+      align-items: flex-start;
       height: 100vh;
-      padding: 1rem;
+      padding: 2rem;
+      box-sizing: border-box;
     }
 
     .container {
+      display: flex;
+      gap: 2rem;
+      max-width: 1200px;
+      width: 100%;
+    }
+
+    .form-box {
       background: white;
       padding: 2rem;
       border-radius: 10px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      max-width: 400px;
-      width: 100%;
+      width: 400px;
+      flex-shrink: 0;
     }
 
     h1 {
@@ -63,45 +71,65 @@
     }
 
     #result {
-      margin-top: 1rem;
+      margin-top: 1.25rem;
       word-break: break-word;
       text-align: center;
       font-size: 0.9rem;
+    }
+
+    .preview-box {
+      flex: 1;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid #ccc;
+      background: white;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    iframe {
+      width: 100%;
+      height: 700px;
+      border: none;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>Customize Your Reveal Link</h1>
-    <form id="linkForm">
-      <label for="name">Baby’s Name or Last Name</label>
-      <input type="text" id="name" name="name" />
+    <div class="form-box">
+      <h1>Customize Your Reveal Link</h1>
+      <form id="linkForm">
+        <label for="name">Baby’s Name or Last Name</label>
+        <input type="text" id="name" name="name" />
 
-      <label for="f">Final Reveal</label>
-      <select id="f" name="f" required>
-        <option value="1">Boy</option>
-        <option value="2">Girl</option>
-      </select>
+        <label for="f">Final Reveal</label>
+        <select id="f" name="f" required>
+          <option value="1">Boy</option>
+          <option value="2">Girl</option>
+        </select>
 
-      <label for="style">Font Style</label>
-      <select id="style" name="style">
-        <option value="">Cursive (Kindly)</option>
-        <option value="plain">Plain (Penmanship)</option>
-      </select>
+        <label for="style">Font Style</label>
+        <select id="style" name="style">
+          <option value="">Cursive (Kindly)</option>
+          <option value="plain">Plain (Penmanship)</option>
+        </select>
 
-      <button type="submit">Generate Link</button>
-    </form>
+        <button type="submit">Generate Link</button>
+      </form>
 
-    <div id="result"></div>
+      <div id="result"></div>
+    </div>
+
+    <div class="preview-box">
+      <iframe id="live-preview" src="https://scratchtoreveal1.netlify.app/" title="Live Preview"></iframe>
+    </div>
   </div>
 
   <script>
     const form = document.getElementById('linkForm');
     const result = document.getElementById('result');
+    const preview = document.getElementById('live-preview');
 
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
-
+    function updatePreview() {
       const name = encodeURIComponent(document.getElementById('name').value.trim());
       const f = document.getElementById('f').value;
       const style = document.getElementById('style').value;
@@ -113,10 +141,17 @@
       if (f) params.append('f', f);
       if (style) params.append('style', style);
 
-      url += params.toString();
+      const finalUrl = url + params.toString();
+      preview.src = finalUrl;
+    }
 
-      result.innerHTML = `<p>Your custom link:</p><a href="${url}" target="_blank">${url}</a>`;
+    form.addEventListener('input', updatePreview);
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      result.innerHTML = `<p>Your custom link:</p><a href="${preview.src}" target="_blank">${preview.src}</a>`;
     });
+
+    updatePreview(); // Initialize
   </script>
 </body>
 </html>
