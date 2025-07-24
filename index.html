@@ -87,6 +87,48 @@
       height: 100%;
       touch-action: none;
     }
+
+    #reveal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0,0,0,0.8);
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      z-index: 1000;
+      overflow: hidden;
+    }
+
+    #reveal-overlay h1 {
+      font-family: 'Kindly', cursive;
+      color: white;
+      font-size: 3rem;
+      margin: 1rem;
+    }
+
+    #reveal-picture {
+      max-width: 80%;
+      max-height: 50%;
+      margin-top: 1rem;
+      display: none;
+    }
+
+    .confetti {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      opacity: 0.9;
+    }
+
+    @keyframes confetti-fall {
+      0% { transform: translateY(-10vh) rotate(0deg); }
+      100% { transform: translateY(110vh) rotate(360deg); }
+    }
   </style>
 </head>
 <body>
@@ -114,10 +156,49 @@
       <canvas></canvas>
     </div>
   </div>
+  <div id="reveal-overlay">
+    <h1 id="reveal-message"></h1>
+    <img id="reveal-picture" alt="" />
+  </div>
 
   <script>
     const radius = 20;
     const overlaySrc = 'circle.png';
+
+    function launchConfetti(color) {
+      const overlay = document.getElementById('reveal-overlay');
+      for (let i = 0; i < 150; i++) {
+        const piece = document.createElement('div');
+        piece.className = 'confetti';
+        piece.style.backgroundColor = color;
+        const size = Math.random() * 6 + 4;
+        piece.style.width = size + 'px';
+        piece.style.height = size + 'px';
+        piece.style.left = Math.random() * 100 + 'vw';
+        piece.style.top = Math.random() * -20 + 'vh';
+        const duration = Math.random() * 3 + 3;
+        const delay = Math.random();
+        piece.style.animation = `confetti-fall ${duration}s linear ${delay}s forwards`;
+        overlay.appendChild(piece);
+        setTimeout(() => piece.remove(), (duration + delay) * 1000);
+      }
+    }
+
+    function showFinalOverlay(isBoy, message, img) {
+      const overlay = document.getElementById('reveal-overlay');
+      overlay.style.backgroundColor = isBoy ? 'rgba(135,206,250,0.8)' : 'rgba(255,182,193,0.8)';
+      const msgEl = document.getElementById('reveal-message');
+      msgEl.textContent = message || (isBoy ? "We're having a boy!" : "We're having a girl!");
+      const imgEl = document.getElementById('reveal-picture');
+      if (img) {
+        imgEl.src = img;
+        imgEl.style.display = 'block';
+      } else {
+        imgEl.style.display = 'none';
+      }
+      overlay.style.display = 'flex';
+      launchConfetti(isBoy ? '#87cefa' : '#ff69b4');
+    }
 
     function fitText(el, min = 24, max = 127) {
       const testSpan = document.createElement("span");
@@ -244,6 +325,8 @@ fitText(el, 32, initialSize * 1.3);
 
       const params = new URLSearchParams(window.location.search);
       const finalReveal = params.get('f') === '1' ? 'boy.png' : 'girl.png';
+      const customMessage = params.get('msg');
+      const customImg = params.get('img');
 
       let revealedCount = 0;
 
@@ -257,6 +340,9 @@ fitText(el, 32, initialSize * 1.3);
           let src;
           if (revealedCount === 5) {
             src = finalReveal;
+            setTimeout(() => {
+              showFinalOverlay(finalReveal.includes('boy'), customMessage, customImg);
+            }, 2000);
           } else {
             src = revealQueue.pop();
           }
