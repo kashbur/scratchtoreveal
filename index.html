@@ -167,11 +167,15 @@ fitText(el, 32, initialSize); // give a decent min size
       overlay.src = overlaySrc;
 
       function redraw() {
-        canvas.width = zone.clientWidth;
-        canvas.height = zone.clientHeight;
+        const dpr = window.devicePixelRatio || 1;
+        const w = zone.clientWidth;
+        const h = zone.clientHeight;
+        canvas.width = w * dpr;
+        canvas.height = h * dpr;
+        ctx.scale(dpr, dpr);
         ctx.globalCompositeOperation = 'source-over';
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.drawImage(overlay, 0, 0, canvas.width, canvas.height);
+        ctx.clearRect(0, 0, w, h);
+        ctx.drawImage(overlay, 0, 0, w, h);
       }
 
       overlay.onload = redraw;
