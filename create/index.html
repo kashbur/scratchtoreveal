@@ -177,7 +177,6 @@
           </div>
         </label>
         <input type="text" id="imgUrl" name="img" />
-        <button type="button" id="validateImg" style="margin-top:0.5rem">Check Image</button>
         <div id="imgError" aria-live="polite"></div>
         <small>Optional – leave blank if you don't want a custom image.</small>
       </form>
@@ -195,7 +194,6 @@
     const result = document.getElementById('result');
     const preview = document.getElementById('live-preview');
     const imgUrlInput = document.getElementById('imgUrl');
-    const validateBtn = document.getElementById('validateImg');
     const imgError = document.getElementById('imgError');
     let validateTimeout;
 
@@ -268,7 +266,6 @@
     form.addEventListener('change', updatePreview);
     imgUrlInput.addEventListener('input', scheduleImageValidation);
     imgUrlInput.addEventListener('change', validateImage);
-    validateBtn.addEventListener('click', validateImage);
 
     updatePreview(); // Trigger on load
   </script>
