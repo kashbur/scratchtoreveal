@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Create Gender Reveal Link</title>
+  <link rel="preload" href="../Penmanship.ttf" as="font" type="font/ttf" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    @font-face {
+      font-family: 'Penmanship';
+      src: url('../Penmanship.ttf') format('truetype');
+      font-display: swap;
+    }
+
+    body {
+      font-family: 'Quicksand', sans-serif;
+      background: linear-gradient(to bottom right, #fffafc, #f9f9ff);
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      height: 100vh;
+      padding: 2rem;
+      margin: 0;
+      box-sizing: border-box;
+    }
+
+    .container {
+      display: flex;
+      gap: 2rem;
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto; /* keep centered within the page */
+    }
+    .form-section {
+      border: 1px solid #ccc;
+      background: #f0f0f0;
+      border-radius: 10px;
+      padding: 1rem;
+      margin-top: 1rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+
+    .form-box {
+      background: white;
+      padding: 2rem;
+      border-radius: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      width: 400px;
+      flex-shrink: 0;
+    }
+
+    .form-section {
+      border: 1px solid #ccc;
+      background: #f0f0f0;
+      border-radius: 10px;
+      padding: 1rem;
+      margin-top: 1rem;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 1.6rem;
+      margin-bottom: 1.5rem;
+    }
+
+    label {
+      display: block;
+      margin-top: 1rem;
+      font-weight: 600;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 0.6rem;
+      margin-top: 0.3rem;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      font-size: 1rem;
+      box-sizing: border-box; /* keep inputs inside the form */
+    }
+
+    #img-help {
+      cursor: pointer;
+      margin-left: 0.3rem;
+      background: #f9d6da;
+      color: #4f4e4c;
+      border-radius: 50%;
+      padding: 0.1rem 0.4rem;
+      font-weight: bold;
+      display: inline-block;
+      font-size: 0.8rem;
+    }
+
+    #tooltip {
+      background: #fefefe;
+      border: 1px solid #ccc;
+      padding: 0.5rem;
+      margin-top: 0.5rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      line-height: 1.4;
+      display: none;
+    }
+
+    #imgError {
+      color: #d9534f;
+      font-size: 0.85rem;
+      margin-top: 0.3rem;
+    }
+
+    #imgError.success {
+      color: #28a745;
+    }
+
+    button {
+      margin-top: 1rem;
+      padding: 0.6rem 1rem;
+      background: #4f4e4c;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .button-row button {
+      flex: 1;
+    }
+
+    #generate {
+      order: 1;
+    }
+
+    #copy {
+      order: 3;
+    }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: default;
+    }
+
+    #copy {
+      background: #337ab7;
+      margin-left: 0.5rem;
+    }
+
+    #result {
+      margin-top: 1rem;
+      word-break: break-word;
+      text-align: center;
+      font-size: 1rem;
+      color: #4f4e4c;
+      display: none;
+    }
+
+    #result a {
+      color: #337ab7;
+      text-decoration: none;
+    }
+
+    #result a:hover {
+      text-decoration: underline;
+    }
+  
+    .preview-box {
+      flex: 1;
+      border-radius: 15px;
+      overflow: hidden;
+      border: 1px solid #ccc;
+      background: white;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    iframe {
+      width: 100%;
+      height: 700px;
+      border: none;
+    }
+
+    @media (max-width: 800px) {
+      .container {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .form-box {
+        width: 100%;
+        margin: 0 auto; /* center form on narrow screens */
+      }
+      .form-section,
+      label {
+        text-align: center; /* center labels and sections */
+      }
+      .preview-box {
+        width: 100%;
+        margin-top: 1rem;
+      }
+      iframe {
+        height: 600px;
+      }
+    }
+
+    small {
+      display: block;
+      margin-top: 0.3rem;
+      font-size: 0.75rem;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="form-box">
+      <h1>Customize Your Reveal Link</h1>
+      <form id="linkForm">
+        <div class="form-section">
+          <label for="f">Boy or Girl?</label>
+          <select id="f" name="f" required>
+            <option value="1">Boy</option>
+            <option value="2">Girl</option>
+          </select>
+        </div>
+
+        <div class="form-section">
+          <label for="name">
+            Title Above the Scratch Area
+            <small>(Name, last name, or special phrase)</small>
+          </label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            placeholder='e.g. "Baby Miller", "Our Precious Blessing"'
+          />
+          <small>If left blank, it will just say “Baby”.</small>
+
+          <label for="nameStyle">Title Font Style</label>
+          <select id="nameStyle" name="nameStyle">
+            <option value="">Cursive</option>
+            <option value="plain">Plain</option>
+          </select>
+        </div>
+
+        <div class="form-section">
+          <label for="msg">Reveal Message</label>
+          <input type="text" id="msg" name="msg" />
+          <small>*This message appears only after scratching the image.</small>
+
+          <label for="msgStyle">Reveal Message Font Style</label>
+          <select id="msgStyle" name="msgStyle">
+            <option value="">Cursive</option>
+            <option value="plain">Plain</option>
+          </select>
+        </div>
+
+        <div class="form-section">
+          <label for="imgUrl">
+            Reveal Image URL
+            <span id="img-help" onclick="toggleTooltip()">?</span>
+            <div id="tooltip">
+              <strong>How to upload to Imgur:</strong><br>
+              1. Go to <a href="https://imgur.com/upload" target="_blank">imgur.com/upload</a><br>
+              2. Upload your image<br>
+              3. Right-click the image and select "Copy Image Address"<br>
+              4. Paste it here
+            </div>
+          </label>
+          <input type="text" id="imgUrl" name="img" />
+          <div id="imgError" aria-live="polite"></div>
+          <small>Optional – leave blank if you don't want a custom image.</small>
+        </div>
+      </form>
+      <div class="button-row">
+        <button type="button" id="generate">Generate URL</button>
+        <button type="button" id="copy" style="display:none;">Copy to Clipboard</button>
+      </div>
+      <div id="result"></div>
+    </div>
+
+    <div class="preview-box">
+      <iframe id="live-preview" src="https://scratch.joyjotstudio.store/" title="Live Preview"></iframe>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('linkForm');
+    const result = document.getElementById('result');
+    const preview = document.getElementById('live-preview');
+    const imgUrlInput = document.getElementById('imgUrl');
+    const imgError = document.getElementById('imgError');
+    const generateBtn = document.getElementById('generate');
+    const copyBtn = document.getElementById('copy');
+    let validateTimeout;
+
+    function toggleTooltip() {
+      const tip = document.getElementById('tooltip');
+      tip.style.display = tip.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function validateImage() {
+      const url = imgUrlInput.value.trim();
+      imgError.classList.remove('success');
+      imgError.textContent = '';
+      if (!url) {
+        imgError.textContent = 'Please enter an image URL.';
+        return;
+      }
+      imgError.textContent = 'Checking...';
+      const test = new Image();
+      test.onload = () => {
+        imgError.textContent = 'Valid image link!';
+        imgError.classList.add('success');
+        updatePreview();
+      };
+      test.onerror = () => {
+        imgError.textContent = 'Oops! This link doesn\'t lead directly to an image. Right-click the image and choose "Copy Image Address" instead.';
+      };
+      test.src = url;
+    }
+
+    function scheduleImageValidation() {
+      clearTimeout(validateTimeout);
+      validateTimeout = setTimeout(validateImage, 500);
+    }
+
+    function buildUrl(includePreview = false) {
+      const name = document.getElementById('name').value.trim();
+      const f = document.getElementById('f').value;
+      const nameStyle = document.getElementById('nameStyle').value;
+      const msgStyle = document.getElementById('msgStyle').value;
+      const msg = document.getElementById('msg').value.trim();
+      const img = imgUrlInput.value.trim();
+
+      const params = new URLSearchParams();
+      if (name) params.append('name', name);
+      if (f) params.append('f', f);
+      if (nameStyle) params.append('nameStyle', nameStyle);
+      if (msgStyle) params.append('msgStyle', msgStyle);
+      if (msg) params.append('msg', msg);
+      if (img) params.append('img', img);
+      if (includePreview) params.append('preview', '1');
+
+      return `https://scratch.joyjotstudio.store/?${params.toString()}`;
+    }
+
+    function updatePreview() {
+      preview.src = buildUrl(true);
+    }
+
+    async function generateLink() {
+      const fullUrl = buildUrl();
+      result.style.display = 'block';
+      result.textContent = 'Generating short link...';
+      try {
+        const res = await fetch('/.netlify/functions/shorten-url', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ long_url: fullUrl })
+        });
+        if (!res.ok) throw new Error('Shortener error');
+        const data = await res.json();
+        result.innerHTML = `<p>Your custom link:</p><a href="${data.short_url}" target="_blank">${data.short_url}</a>`;
+        copyBtn.dataset.clipboard = data.short_url;
+      } catch (e) {
+        result.innerHTML = `<p>Your custom link:</p><a href="${fullUrl}" target="_blank">${fullUrl}</a>`;
+        copyBtn.dataset.clipboard = fullUrl;
+      }
+      copyBtn.style.display = 'inline-block';
+    }
+
+    form.addEventListener('input', updatePreview);
+    form.addEventListener('change', updatePreview);
+    imgUrlInput.addEventListener('input', scheduleImageValidation);
+    imgUrlInput.addEventListener('change', validateImage);
+    generateBtn.addEventListener('click', generateLink);
+    copyBtn.addEventListener('click', async () => {
+      const text = copyBtn.dataset.clipboard;
+      try {
+        await navigator.clipboard.writeText(text);
+        const prev = copyBtn.textContent;
+        copyBtn.textContent = 'Copied!';
+        setTimeout(() => { copyBtn.textContent = prev; }, 2000);
+      } catch (e) {
+        alert('Copy failed');
+      }
+    });
+
+    updatePreview(); // Trigger on load
+  </script>
+</body>
+</html>
