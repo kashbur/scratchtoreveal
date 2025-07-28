@@ -21,7 +21,26 @@
   <link rel="preload" href="circle.png" as="image">
   <link rel="preload" href="girl.png" as="image">
   <link rel="preload" href="boy.png" as="image">
+  <script>
+    (function(){
+      const params = new URLSearchParams(location.search);
+      window.initialParams = params;
+      window.initialName = params.get('name') || 'Baby';
+      function fontVal(style){
+        const pen = style === 'plain' || style === 'penmanship';
+        return pen ? "'Penmanship', sans-serif" : "'Kindly', cursive";
+      }
+      const nStyle = params.get('nameStyle') || params.get('style');
+      const mStyle = params.get('msgStyle') || params.get('style');
+      if(nStyle) document.documentElement.style.setProperty('--name-font', fontVal(nStyle));
+      if(mStyle) document.documentElement.style.setProperty('--msg-font', fontVal(mStyle));
+    })();
+  </script>
   <style>
+    :root {
+      --name-font: 'Kindly', cursive;
+      --msg-font: 'Kindly', cursive;
+    }
     @font-face {
       font-family: 'Kindly';
       src: url('Kindly.otf') format('opentype');
@@ -61,7 +80,7 @@
       align-items: center;
       text-align: center;
       color: #4f4e4c;
-      font-family: 'Kindly', cursive;
+      font-family: var(--name-font);
       white-space: nowrap;
       overflow: hidden;
       transform: translateY(-50%);
@@ -139,7 +158,7 @@
     }
 
     #reveal-overlay h1 {
-      font-family: 'Kindly', cursive;
+      font-family: var(--msg-font);
       color: white;
       font-size: 3rem;
       margin: 1rem;
@@ -189,6 +208,7 @@
   <div id="container">
     <img id="ticket" src="background.png" alt="Gender reveal ticket" />
     <div id="name-container"></div>
+    <script>document.getElementById('name-container').textContent = window.initialName;</script>
     <div class="scratch-zone" style="left: 7.00%; top: 65.58%;">
       <img alt="Reveal" />
       <canvas></canvas>
@@ -227,13 +247,6 @@
       return usePen ? "'Penmanship', sans-serif" : "'Kindly', cursive";
     }
 
-    function applyFont() {
-      const params = new URLSearchParams(window.location.search);
-      const nameStyle = params.get('nameStyle') || params.get('style');
-      const msgStyle = params.get('msgStyle') || params.get('style');
-      document.getElementById('name-container').style.fontFamily = getFont(nameStyle);
-      document.getElementById('reveal-message').style.fontFamily = getFont(msgStyle);
-    }
 
     function launchConfetti(colors, speed = 1) {
       const overlay = document.getElementById('reveal-overlay');
@@ -304,8 +317,7 @@
 
     function initName() {
       const el = document.getElementById('name-container');
-      const params = new URLSearchParams(window.location.search);
-      const name = params.get('name') || 'Baby';
+      const name = window.initialName;
       el.textContent = name;
       const fit = () => {
         const container = document.getElementById('container');
@@ -314,15 +326,10 @@
         el.style.fontSize = initialSize + 'px';
 fitText(el, 32, initialSize * 1.3);
       };
-      document.fonts.ready.then(fit);
       const ticket = document.getElementById('ticket');
-      if (ticket.complete) {
-        fit();
-      } else {
-        ticket.addEventListener('load', fit, { once: true });
-      }
+      const ticketReady = ticket.complete ? Promise.resolve() : new Promise(r => ticket.addEventListener('load', r, {once: true}));
+      Promise.all([document.fonts.ready, ticketReady]).then(fit);
       window.addEventListener('resize', fit);
-      fit();
     }
 
     ['girl.png', 'boy.png'].forEach(src => {
@@ -394,7 +401,6 @@ fitText(el, 32, initialSize * 1.3);
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-      applyFont();
       initName();
 
       const params = new URLSearchParams(window.location.search);
