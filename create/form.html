@@ -352,7 +352,8 @@
       if (img) params.append('img', img);
       if (includePreview) params.append('preview', '1');
 
-      return `https://scratch.joyjotstudio.store/?${params.toString()}`;
+      const encoded = encodeURIComponent(btoa(params.toString()));
+      return `https://scratch.joyjotstudio.store/?d=${encoded}`;
     }
 
     function updatePreview() {
