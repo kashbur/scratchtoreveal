@@ -27,7 +27,10 @@
       let params;
       if (searchParams.has('d')) {
         try {
-          const decoded = atob(decodeURIComponent(searchParams.get('d')));
+          const b64 = decodeURIComponent(searchParams.get('d'));
+          const decoded = new TextDecoder().decode(
+            Uint8Array.from(atob(b64), c => c.charCodeAt(0))
+          );
           params = new URLSearchParams(decoded);
         } catch (e) {
           params = searchParams;
